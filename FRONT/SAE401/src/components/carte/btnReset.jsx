@@ -1,5 +1,3 @@
-import React from 'react';
-
 const BtnReset = () => {
     return (
         <div>
