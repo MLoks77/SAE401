@@ -1,9 +1,12 @@
-import React from "react";
+import Navbar from "../components/navbar";
+import BtnYear from "../components/btnYear";
 
 const Carte = () => {
     return (
         <div>
-        </div>
+            <Navbar></Navbar>
+            <BtnYear></BtnYear>
+        </div >
     );
 };
 
