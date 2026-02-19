@@ -1,1 +1,41 @@
 @import "tailwindcss";
+
+@font-face {
+    font-family: 'TikTok Sans';
+    src: url('./font/TikTokSans-Regular.ttf');
+}
+
+.tiktok-sans {
+    font-family: "TikTok Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+        "slnt" 0,
+        "wdth" 100;
+}
+
+/* animation de hover sur le texte où la barre apparait au milieu */
+
+.hoverbar {
+    position: relative;
+    display: inline-block;
+}
+
+.hoverbar::after {
+    content: '';
+    /* le content est vide pour que la barre soit visible */
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 50%;
+    /* pour apparaitre au milieu on met 50% left */
+    transform: translateX(-50%);
+    background-color: white;
+    transition: width 0.2s ease-in-out;
+}
+
+.hoverbar:hover::after {
+    width: 100%;
+}
