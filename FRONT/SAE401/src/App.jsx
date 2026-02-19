@@ -14,7 +14,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Analyse />} />
+          <Route path="/" element={<Carte />} />
           <Route path="/carte" element={<Carte />} />
           <Route path="/gridCompar" element={<GridCompar />} />
           <Route path="/graphCreation" element={<GraphCreation />} />

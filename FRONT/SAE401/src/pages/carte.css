@@ -1,0 +1,64 @@
+/* Styles essentiels pour l'affichage de la carte */
+
+.no-scroll-wrapper {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Empêche le scroll */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8fafc;
+}
+
+#canvas-carte-france {
+  width: 800px;
+  height: 800px;
+  display: block;
+}
+
+#svg-carte-france {
+  max-width: 800px;
+  max-height: 800px;
+  width: 100%;
+  height: auto;
+}
+
+/* Couleurs des régions */
+
+#svg-carte-france path {
+  stroke-width: 1;
+  stroke: var(--basic-color, black);
+  transition: fill 0.2s ease, stroke-width 0.2s ease;
+  cursor: pointer;
+}
+
+@media (prefers-color-scheme: dark) {
+  #svg-carte-france path {
+    stroke: var(--basic-color, white);
+  }
+}
+
+/* Hover par département */
+#svg-carte-france path:hover {
+  fill: tomato !important;
+  stroke-width: 2;
+}
+
+#INSEE-01 { fill: blueviolet; }
+#INSEE-02 { fill: cadetblue; }
+#INSEE-03 { fill: cornflowerblue; }
+#INSEE-04 { fill: darkblue; }
+#INSEE-06 { fill: darkslateblue; }
+#INSEE-75 { fill: deepskyblue; }
+#INSEE-11 { fill: dodgerblue; }
+#INSEE-24 { fill: lightblue; }
+#INSEE-27 { fill: lightskyblue; }
+#INSEE-28 { fill: lightsteelblue; }
+#INSEE-32 { fill: mediumblue; }
+#INSEE-44 { fill: mediumslateblue; }
+#INSEE-52 { fill: midnightblue; }
+#INSEE-53 { fill: powderblue; }
+#INSEE-76 { fill: royalblue; }
+#INSEE-84 { fill: skyblue; }
+#INSEE-93 { fill: slateblue; }
+#INSEE-94 { fill: steelblue; }
