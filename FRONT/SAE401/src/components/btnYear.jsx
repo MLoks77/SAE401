@@ -1,5 +1,8 @@
 import { useState } from "react";
+import { useLocation } from 'react-router-dom'; // comme pour navlink, sa permet de détecter la page actuel
 import SearchBar from "../components/Searchbar";
+
+// Par Maxime Derènes
 
 const BtnYear = () => {
     // https://stackoverflow.com/questions/72918094/how-can-i-update-class-name-with-usestate-to-activate-the-necessary-css-conditio
@@ -25,6 +28,9 @@ const BtnYear = () => {
     // key = id
     // map sert comme un for dans un tableau
 
+    const location = useLocation(); // renvoie l'endroit où le composant se trouve
+    const showSearchBar = location.pathname !== '/graphCreation';
+
     return (
         <div className="flex flex-col md:flex-row items-center justify-center md:justify-between bg-[#152033] w-full p-4 gap-4">
 
@@ -37,9 +43,11 @@ const BtnYear = () => {
                 </div>
             </nav>
 
-            <div className="w-full md:w-auto flex justify-center md:justify-end md:pr-4">
-                <SearchBar />
-            </div>
+            {showSearchBar && (
+                <div className="w-full md:w-auto flex justify-center md:justify-end md:pr-4">
+                    <SearchBar />
+                </div>
+            )}
 
         </div>
     );
