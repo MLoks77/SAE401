@@ -5,7 +5,6 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #f8fafc;
 }
 
 .carte {
@@ -48,6 +47,8 @@
   cursor: pointer;
 }
 
+/* couleur des traits entre les départements */
+
 @media (prefers-color-scheme: dark) {
   #svg-carte-france path {
     stroke: var(--basic-color, white);
@@ -56,7 +57,7 @@
 
 /* Hover par département */
 #svg-carte-france path:hover {
-  fill: tomato !important;
+  fill: rgb(255, 38, 0) !important;
   stroke-width: 2;
 }
 

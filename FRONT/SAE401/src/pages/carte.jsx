@@ -1,12 +1,11 @@
-import React from "react";
 import Navbar from "../components/navbar";
 import BtnYear from "../components/btnYear";
 import "../css/carte.css";
 
 const Carte = () => {
     return (
-        <div className="wrapper">
-            <Navbar />
+        <div className="wrapper bg-[#1A1A20]">
+            < Navbar />
             <BtnYear />
             <div className="carte"> {/* lien vers la carte : https://www.kortic.com/carte-de-france-vectorielle-interactive-et-accessible.html#javascript */}
                 <canvas id="canvas-carte-france" width="800" height="800"></canvas>
@@ -272,7 +271,7 @@ const Carte = () => {
                     </g>
                 </svg>
             </div>
-        </div>
+        </div >
     );
 };
 
