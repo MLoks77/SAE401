@@ -5,7 +5,7 @@ import { useState } from "react";
 // par maxime derènes
 
 const GraphCreation = () => {
-
+    // liste des types de graphiques
     const graphType = [
         { type: "Histogramme", icon: "./images/graphicons/histogram.png" },
         { type: "Camembert", icon: "./images/graphicons/camembert.png" },
@@ -15,8 +15,34 @@ const GraphCreation = () => {
     const taillegraph = "50px"
 
     const [activeGraphType, setActiveGraphType] = useState(graphType);
+    // fin liste des types de graphiques
 
+    // titres
     const titres = ["Type de visualisation", "Données", "Filtres"];
+    // fin titres
+
+    // liste tableaux metriques
+    const metrics1 = [
+        { type: "Sélectionnez une métrique", value: null },
+        { type: "Nombre de logements", value: "nb_logements" },
+        { type: "Loyer moyen au m²", value: "loyer_moyen" },
+        { type: "Surface moyenne", value: "surface_moyenne" },
+        { type: "Taux de vacance", value: "taux_vacance" },
+    ];
+
+    const [activeMetrics1, setActiveMetrics1] = useState(metrics1);
+
+    const axecomparaison = [
+        { type: "Sélectionnez une comparaison", value: null },
+        { type: "Par département", value: "departement" },
+        { type: "Par région", value: "region" },
+        { type: "Par type de logement", value: "type_logement" },
+    ];
+
+    // Pour le moment j'ai mis 2 valeurs null juste pour "remettre à 0"
+
+    const [activeAxecomparaison, setActiveAxecomparaison] = useState(axecomparaison);
+    // fin tableaux metriques
 
     return (
         <div>
@@ -44,7 +70,7 @@ const GraphCreation = () => {
                                 {/* Grille pour choisir les graphs */}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
                                     {graphType.map((g) => {
-                                        const isActive = activeGraphType.type === g.type;
+                                        const isActive = activeGraphType.type === g.type; // vérifie si le graphique est actif
                                         return (
                                             <button key={g.type}
                                                 className={`flex items-center gap-4 p-3 rounded-lg cursor-pointer text-white transition-colors ${isActive ? "bg-[#133479] border border-blue-400" : "bg-[#111822] hover:bg-[#1A2A40]"}`}
@@ -64,6 +90,30 @@ const GraphCreation = () => {
                                     <p className="border border-white bg-blue-600 rounded-full px-2 text-white">2</p>
                                     <h1 className="text-[#D2D2D2] text-lg font-bold px-2">{titres[1]}</h1>
                                 </div>
+
+
+                                <div className="mt-5 flex flex-col gap-5">
+                                    <select
+                                        id="metriques"
+                                        className="w-full p-3 bg-[#111822] text-white cursor-pointer"
+                                    >
+                                        <option value="" hidden>Sélectionnez une métrique</option>
+                                        {metrics1.map((m) => (
+                                            <option key={m.type} value={m.value}>{m.type}</option>
+                                        ))}
+                                    </select>
+
+                                    <select
+                                        id="comparaison"
+                                        className="w-full p-3 bg-[#111822] text-white cursor-pointer"
+                                    >
+                                        <option value="" hidden>Sélectionnez une comparaison</option>
+                                        {axecomparaison.map((c) => (
+                                            <option key={c.type} value={c.value}>{c.type}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
                             </div>
 
 
