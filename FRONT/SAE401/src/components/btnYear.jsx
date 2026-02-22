@@ -12,8 +12,9 @@ const BtnYear = () => {
     const years = ["2021", "2022", "2023"];
     const [activeYear, setActiveYear] = useState(years[0]); // Objet n°1 du tableau = année active
 
-    const location = useLocation(); // renvoie l'endroit où le composant se trouve
-    const showSearchBar = location.pathname !== '/graphCreation';
+    // j'ai commenté pour le moment, c'est si vous souhaitez cacher la barre de recherche sur votre page
+    // const location = useLocation(); // renvoie l'endroit où le composant se trouve
+    // const showSearchBar = location.pathname !== '/graphCreation';
 
     return (
         <div className="flex flex-col md:flex-row items-center justify-center md:justify-between bg-[#152033] w-full p-4 gap-4">
@@ -40,11 +41,12 @@ const BtnYear = () => {
                 </div>
             </nav>
 
-            {showSearchBar && (
-                <div className="w-full md:w-auto flex justify-center md:justify-end md:pr-4">
-                    <SearchBar />
-                </div>
-            )}
+            {/* j'ai commenté pour le moment, c'est si vous souhaitez cacher la barre de recherche sur votre page */}
+            {/* {showSearchBar && ( */}
+            <div className="w-full md:w-auto flex justify-center md:justify-end md:pr-4">
+                <SearchBar />
+            </div>
+            {/* )} */}
 
         </div>
     );

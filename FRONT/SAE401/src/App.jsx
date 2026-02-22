@@ -1,7 +1,6 @@
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Footer from './components/footer';
 import Analyse from './pages/Analyse';
 import Carte from './pages/carte';
 import GraphCreation from './pages/graphCreation';
@@ -19,7 +18,6 @@ function App() {
           <Route path="/gridCompar" element={<GridCompar />} />
           <Route path="/graphCreation" element={<GraphCreation />} />
         </Routes>
-        <Footer />
       </BrowserRouter>
     </>
   )
