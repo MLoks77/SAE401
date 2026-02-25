@@ -1,6 +1,8 @@
 import Navbar from "../components/navbar";
 import { useState, useRef, useEffect } from "react";
-import Chart from "chart.js/auto";
+
+import GraphOPENcv from "../components/creationexport/graphOPENcv";
+import BtnExport from "../components/creationexport/btnExport";
 
 // par maxime derènes
 
@@ -12,7 +14,7 @@ const GraphCreation = () => {
         { type: "Courbe", icon: "./images/graphicons/courbe.png" },
     ];
 
-    const [activeGraphType, setActiveGraphType] = useState(graphType);
+    const [activeGraphType, setActiveGraphType] = useState(graphType[0]); // utilise le premier graph : historigramme
 
     // titres
     const titres = ["Type de visualisation", "Données", "Filtres"];
@@ -65,6 +67,8 @@ const GraphCreation = () => {
 
 
 
+
+
     // filtre région
 
     const regions = [
@@ -84,70 +88,12 @@ const GraphCreation = () => {
     ];
 
     const [selectedRegion, setSelectedRegion] = useState("");
-    const chartRef = useRef(null);
-    const chartInstance = useRef(null);
+
 
     const handleRegionChange = (e) => {
         const value = e.target.value;
         setSelectedRegion(value);
     };
-
-    // le graph
-
-    // Initialisation et mise à jour du graphique
-    useEffect(() => {
-        if (chartRef.current) {
-            // Détruire l'instance existante avant d'en créer une nouvelle
-            if (chartInstance.current) {
-                chartInstance.current.destroy();
-            }
-
-            const ctx = chartRef.current.getContext("2d");
-            chartInstance.current = new Chart(ctx, {
-                // type de graph
-                type: activeGraphType.type === "Histogramme" ? "bar" : activeGraphType.type === "Camembert" ? "pie" : "line",
-                // données = fictive pour le moment à changer après
-                data: {
-                    // labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-                    // datasets: [{
-                    //     label: "Données de test",
-                    //     data: [12, 19, 3, 5, 2, 3],
-                    //     backgroundColor: activeGraphType.type === "Camembert"
-                    //         ? ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#6366f1", "#8b5cf6"]
-                    //         : "#3b82f6",
-                    //     borderColor: "#3b82f6",
-                    //     borderWidth: 1
-                    // }]
-                },
-                options: {
-                    responsive: true, // rend le graph responsive
-                    maintainAspectRatio: false, // permet de définir la taille du graph
-                    plugins: {
-                        legend: {
-                            labels: { color: "white" } // couleur des légendes
-                        }
-                    },
-                    scales: activeGraphType.type !== "Camembert" ? {
-                        y: {
-                            beginAtZero: true, // commence à 0
-                            grid: { color: "rgba(255, 255, 255, 0.1)" }, // couleur des lignes
-                            ticks: { color: "white" } // couleur des axes
-                        },
-                        x: {
-                            grid: { color: "rgba(255, 255, 255, 0.1)" }, // couleur des lignes
-                            ticks: { color: "white" } // couleur des axes
-                        }
-                    } : {}
-                }
-            });
-        }
-        // Nettoyage quand on change de graph
-        return () => {
-            if (chartInstance.current) {
-                chartInstance.current.destroy();
-            }
-        };
-    }, [activeGraphType]);
 
     return (
         <div className="h-screen flex flex-col overflow-hidden bg-[#111822]">
@@ -281,17 +227,10 @@ const GraphCreation = () => {
                         </div>
 
                         {/* Export fixe en bas du sidebar */}
-                        <div className="p-6 border-t border-[#334155] bg-[#1A2432]">
-                            <button className="w-full bg-blue-800 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors cursor-pointer active:scale-[0.98]">
-                                Exporter la visualisation
-                            </button>
-                        </div>
+                        <BtnExport />
                     </div>
 
-                    {/* Canva Graphique */}
-                    <div className="col-span-2 bg-[#111822] relative p-8">
-                        <canvas ref={chartRef} id="graph" className="w-auto h-auto"></canvas>
-                    </div>
+                    <GraphOPENcv activeGraphType={activeGraphType} />
                 </div>
             </section>
         </div>
