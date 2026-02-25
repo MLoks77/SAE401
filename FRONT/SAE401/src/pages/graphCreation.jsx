@@ -1,7 +1,7 @@
 import Navbar from "../components/navbar";
 import { useState, useRef, useEffect } from "react";
 
-import GraphOPENcv from "../components/creationexport/graphOPENcv";
+import GraphChart from "../components/creationexport/graphChart";
 import BtnExport from "../components/creationexport/btnExport";
 
 // par maxime derènes
@@ -88,7 +88,7 @@ const GraphCreation = () => {
     ];
 
     const [selectedRegion, setSelectedRegion] = useState("");
-
+    const chartRef = useRef(null);
 
     const handleRegionChange = (e) => {
         const value = e.target.value;
@@ -227,10 +227,10 @@ const GraphCreation = () => {
                         </div>
 
                         {/* Export fixe en bas du sidebar */}
-                        <BtnExport />
+                        <BtnExport chartRef={chartRef} />
                     </div>
 
-                    <GraphOPENcv activeGraphType={activeGraphType} />
+                    <GraphChart ref={chartRef} activeGraphType={activeGraphType} />
                 </div>
             </section>
         </div>

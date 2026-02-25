@@ -1,23 +1,32 @@
 import Chart from "chart.js/auto";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 
 
-
-const GraphOPENcv = ({ activeGraphType }) => {
+// const [activeGraphType, setActiveGraphType] = useState(graphType[0]); // utilise le premier graph : historigramme
+// activeGraphType est utilisé comme un props du parent, donc sa reçoit le type de graph des 3 boutons
+const GraphChart = forwardRef(({ activeGraphType }, ref) => {
     const chartRef = useRef(null);
-    const chartInstance = useRef(null);
+    const chartItem = useRef(null); // const graph pour l'export en image
+
+    // https://react.dev/reference/react/useImperativeHandle
+    // Expose le chartItem au parent via la ref
+    useImperativeHandle(ref, () => ({
+        toBase64Image: () => {
+            return chartItem.current ? chartItem.current.toBase64Image() : null;
+        }
+    }));
 
     // le graph
     // Initialisation et mise à jour du graphique
     useEffect(() => {
         if (chartRef.current) {
             // Détruire l'instance existante avant d'en créer une nouvelle
-            if (chartInstance.current) {
-                chartInstance.current.destroy();
+            if (chartItem.current) {
+                chartItem.current.destroy();
             }
 
             const ctx = chartRef.current.getContext("2d");
-            chartInstance.current = new Chart(ctx, {
+            chartItem.current = new Chart(ctx, {
                 // type de graph
                 type: activeGraphType?.type === "Histogramme" ? "bar" : activeGraphType?.type === "Camembert" ? "pie" : "line",
                 // données = fictive pour le moment à changer après
@@ -57,8 +66,8 @@ const GraphOPENcv = ({ activeGraphType }) => {
         }
         // Nettoyage quand on change de graph
         return () => {
-            if (chartInstance.current) {
-                chartInstance.current.destroy();
+            if (chartItem.current) {
+                chartItem.current.destroy();
             }
         };
     }, [activeGraphType]);
@@ -68,6 +77,6 @@ const GraphOPENcv = ({ activeGraphType }) => {
             <canvas ref={chartRef} id="graph" className="w-auto h-auto"></canvas>
         </div>
     );
-}
+});
 
-export default GraphOPENcv;
+export default GraphChart;
