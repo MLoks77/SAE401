@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/api/departements', name: 'api_departements_')]
-class DepartementController extends AbstractController
+class DepartementsController extends AbstractController
 {
     #[Route('', methods: ['GET'], name: 'get_departements')]
     public function index(DepartementsRepository $repository): JsonResponse

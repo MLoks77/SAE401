@@ -1,4 +1,14 @@
-je vous ai mis toute les API ici, avec le code de base pour commencer,
-vous pouvez les modifier en fonction de vos besoins.
+Toute les api sont ici, vous pouvez les modifier en fonction de vos besoins.
 
-SUPPRIMER CE readme.me à la fin de la SAE
+Configuration du CORS
+Pour que le frontend de react sur le port 5173 puisse communiquer avec les API de symfony au port 8000, 
+j'ai rajouté CORS a été configuré via le cors bundle.
+
+https://github.com/nelmio/NelmioCorsBundle
+
+- Fichier de config : config/packages/nelmio_cors.yaml
+
+\bddSAE401\config\packages\nelmio_cors.yaml
+
+- Variable  : Dans le fichier .env, la variable CORS_ALLOW_ORIGIN définit quels domaines sont autorisés à appeler l'API.
+
