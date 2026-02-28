@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/api/regions', name: 'api_regions_')]
 class RegionController extends AbstractController
 {
-    #[Route('/regions', methods: ['GET'], name: 'get_regions', )]
+    #[Route('', methods: ['GET'], name: 'get_regions')]
     public function index(RegionsRepository $repository): JsonResponse
     {
         return $this->json($repository->findAll());
