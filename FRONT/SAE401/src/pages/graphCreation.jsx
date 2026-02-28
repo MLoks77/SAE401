@@ -2,6 +2,8 @@ import Navbar from "../components/navbar";
 import { useState, useRef, useEffect } from "react";
 
 import GraphChart from "../components/creationexport/graphChart";
+
+import BtnReset from "../components/creationexport/btnReset";
 import BtnExport from "../components/creationexport/btnExport";
 
 // par maxime derènes
@@ -107,10 +109,20 @@ const GraphCreation = () => {
     const isEtape3Complete = isEtape2Complete && selectedY1 !== "" && selectedY2 !== "" && selectedRegion !== "";
     const isEtape4Complete = isEtape3Complete;
 
-    // Helper pour les classes CSS des étapes
-    const suivietapes = (isPreviousComplete) => {
-        if (!isPreviousComplete) return "p-4 bg-[#111822]/20 rounded-lg opacity-30 pointer-events-none grayscale transition-all duration-500";
+    const suivietapes = (EtapePrecedenteComplete) => {
+        if (!EtapePrecedenteComplete) return "p-4 bg-[#111822]/20 rounded-lg opacity-30 pointer-events-none grayscale transition-all duration-500";
         return "p-4 bg-[#111822] rounded-lg transition-all duration-500";
+    };
+
+    // fonction pour reset
+
+    const reset = () => {
+        setActiveGraphType(null);
+        setSelectedMetriques("");
+        setSelectedAxe("");
+        setSelectedY1("");
+        setSelectedY2("");
+        setSelectedRegion("");
     };
 
     return (
@@ -266,8 +278,12 @@ const GraphCreation = () => {
 
 
                             {/* Export fixe en bas */}
+                            {/* pointer-events-auto = permet de cliquer sur le bouton, pointer-events-none = permet de ne pas cliquer sur le bouton */}
                             <span ref={etape4} className={isEtape4Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"}>
                                 <BtnExport chartRef={chartRef} />
+                            </span>
+                            <span ref={etape4} className={isEtape4Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"}>
+                                <BtnReset reset={reset} />
                             </span>
                         </div>
                     </div>

@@ -1,6 +1,6 @@
 import Chart from "chart.js/auto";
 import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
-
+import favicon from "/favicon/favicon.ico";
 
 // const [activeGraphType, setActiveGraphType] = useState(graphType[0]); // utilise le premier graph : historigramme
 // activeGraphType est utilisé comme un props du parent, donc sa reçoit le type de graph des 3 boutons
@@ -80,9 +80,7 @@ const GraphChart = forwardRef(({ activeGraphType }, ref) => {
             ) : (
                 <div className="text-center space-y-4">
                     <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
-                        <svg className="w-8 h-8 text-blue-500 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                        </svg>
+                        <img src={favicon} alt="Logo" className="w-8 h-8" />
                     </div>
                     <p className="text-[#94a3b8] font-medium italic">Veuillez choisir un type de graphique pour commencer la visualisation</p>
                 </div>

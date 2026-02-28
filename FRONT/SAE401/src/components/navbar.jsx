@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import favicon from "/favicon/favicon.ico";
 // import Favicon from ''; 
 // rajouter le favicon
 
@@ -12,7 +13,7 @@ const Navbar = () => {
     return (
         <nav className="bg-[#0A1420] flex items-center justify-center p-4">
             <div className="absolute left-4 hidden md:block">
-                <img src="./favicon/favicon.ico " alt="Logo" className="w-8 h-8" />
+                <img src={favicon} alt="Logo" className="w-8 h-8" />
             </div>
             <div className="tiktok-sans flex gap-4"> {/*isActive est une prop de NavLink qui est true si le lien est actif et donc va appliquer une certaine classe*/}
                 <NavLink to="/" className={({ isActive }) => isActive ? active : simple}>ANALYSE</NavLink>
