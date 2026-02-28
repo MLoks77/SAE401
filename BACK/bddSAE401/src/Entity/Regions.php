@@ -1,11 +1,17 @@
 <?php
 
+// setters et getters pour les infos sur les regions
+
+// données présentes :
+// id_region
+// nom_region
+// departements
+
 namespace App\Entity;
 
 use App\Repository\RegionsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RegionsRepository::class)]
@@ -19,9 +25,6 @@ class Regions
     #[ORM\Column(length: 150)]
     private ?string $nom_region = null;
 
-    /**
-     * @var Collection<int, Departements>
-     */
     #[ORM\OneToMany(targetEntity: Departements::class, mappedBy: 'id_region')]
     private Collection $departements;
 
@@ -54,9 +57,6 @@ class Regions
         return $this;
     }
 
-    /**
-     * @return Collection<int, Departements>
-     */
     public function getDepartements(): Collection
     {
         return $this->departements;
@@ -68,19 +68,21 @@ class Regions
             $this->departements->add($departement);
             $departement->setIdRegion($this);
         }
-
+        // contains = vérifie si l'object existe déjà
+        // add = ajoute l'élément à la collection
+        // setIdRegion = met à jour le lien entre la region et le département
         return $this;
     }
 
     public function removeDepartement(Departements $departement): static
     {
         if ($this->departements->removeElement($departement)) {
-            // set the owning side to null (unless already changed)
             if ($departement->getIdRegion() === $this) {
                 $departement->setIdRegion(null);
             }
         }
-
+        // removeElement = supprime l'élément 
+        // setIdRegion = met à jour le lien entre la region et le département
         return $this;
     }
 }

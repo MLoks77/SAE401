@@ -1,9 +1,15 @@
 <?php
 
+// setters et getters pour les informations sur les départements
+
+// données présentes :
+// code_dept
+// nom_dept
+// id_region
+
 namespace App\Entity;
 
 use App\Repository\DepartementsRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DepartementsRepository::class)]
@@ -13,15 +19,16 @@ class Departements
     #[ORM\Column(length: 10)]
     private ?string $code_dept = null;
 
+    // nom du département
     #[ORM\Column(length: 150)]
     private ?string $nom_dept = null;
 
-    #[ORM\ManyToOne(inversedBy: 'departements')]
+    #[ORM\ManyToOne(inversedBy: 'departements')] // manytoone = une region peut avoir plusieurs départements
     #[ORM\JoinColumn(
         name: 'id_region',
         referencedColumnName: 'id_region',
         nullable: false
-    )]
+    )] // joincolumn = la region est liée au département par son nom, sa colonne et il peut être null
     private ?Regions $id_region = null;
 
     public function getCodeDept(): ?string

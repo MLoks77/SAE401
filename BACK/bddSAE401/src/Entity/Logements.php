@@ -1,5 +1,14 @@
 <?php
 
+// setters et getters pour les informations sur les logements
+
+// données présentes :
+// annee
+// code_dept
+// nb_logements
+// taux_logements_sociaux
+// taux_logements_vacants
+
 namespace App\Entity;
 
 use App\Repository\LogementsRepository;

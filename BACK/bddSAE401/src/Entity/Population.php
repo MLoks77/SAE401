@@ -1,5 +1,22 @@
 <?php
 
+// setters et getters pour les informations sur la population
+
+// données présentes :
+// annee
+// code_dept
+// nb_habitants
+// densite
+// variation_pop
+// solde_naturel
+// solde_migratoire
+// solde naturel et migratoire = fusion = accroissement total 
+
+// pop_moins_20ans
+// pop_plus_60ans
+// taux_chomage
+// taux_pauvrete
+
 namespace App\Entity;
 
 use App\Repository\PopulationRepository;
@@ -135,6 +152,16 @@ class Population
 
         return $this;
     }
+
+    // accroissement = solde naturel + solde migratoire : permet de savoir si la population globale s'accroie
+
+    public function getAccroissement(): float
+    {
+        return $this->solde_naturel + $this->solde_migratoire;
+    }
+
+
+
 
     public function getPopMoins20ans(): ?float
     {
