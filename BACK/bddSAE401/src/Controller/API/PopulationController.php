@@ -9,10 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/populations', name: 'api_populations_')]
+#[Route('/api/population', name: 'api_population_')]
 class PopulationController extends AbstractController
 {
-    #[Route('', methods: ['GET'], name: 'get_populations')]
+    #[Route('', methods: ['GET'], name: 'get_population')]
     public function index(PopulationRepository $repository): JsonResponse
     {
         return $this->json($repository->findAll());
