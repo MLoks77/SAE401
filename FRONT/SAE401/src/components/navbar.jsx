@@ -18,7 +18,7 @@ const Navbar = () => {
             <div className="tiktok-sans flex gap-4"> {/*isActive est une prop de NavLink qui est true si le lien est actif et donc va appliquer une certaine classe*/}
                 <NavLink to="/" className={({ isActive }) => isActive ? active : simple}>ANALYSE</NavLink>
                 <NavLink to="/carte" className={({ isActive }) => isActive ? active : simple}>CARTE</NavLink>
-                <NavLink to="/gridCompar" className={({ isActive }) => isActive ? active : simple}>COMPARER</NavLink>
+                <NavLink to="/Comparaison" className={({ isActive }) => isActive ? active : simple}>COMPARER</NavLink>
                 <NavLink to="/graphCreation" className={({ isActive }) => isActive ? active : simple}>CRÉATION</NavLink>
             </div>
         </nav>
