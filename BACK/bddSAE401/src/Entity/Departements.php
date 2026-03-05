@@ -37,6 +37,7 @@ class Departements
 
     public function getCodeDept(): ?string
     {
+
         return $this->code_dept;
     }
 

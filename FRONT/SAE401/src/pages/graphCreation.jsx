@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { capitalfirstletter } from "../services/fonctions";
 
 // API
 import { getDepartementsChoixZone, getRegionsChoixZone } from "../services/ServicesPages/GraphCreation";
@@ -11,14 +12,26 @@ import BtnExport from "../components/creationexport/btnExport";
 // par maxime derènes
 
 const GraphCreation = () => {
-    // liste des types de graphiques
+    // global
+    const titres = ["Type de visualisation", "Données", "Filtres"];
+    const chartRef = useRef(null); // graphique
+
+
+
+    //  PARTIE 1
+    const [activeGraphType, setActiveGraphType] = useState(null); // choix du graphique
     const graphType = [
         { type: "Histogramme", icon: "./images/graphicons/histogram_b.png" },
         { type: "Camembert", icon: "./images/graphicons/camembert_b.png" },
         { type: "Courbe", icon: "./images/graphicons/courbe_b.png" },
     ];
 
-    // liste tableaux metriques
+    //  PARTIE 2 
+    const [departementvalues, setDepartementvalues] = useState([]); // départements
+    const [regionvalues, setRegionvalues] = useState([]); // régions
+    const [selectedMetriques, setSelectedMetriques] = useState(""); // métriques
+    const [selectedAxe, setSelectedAxe] = useState(""); // axe de comparaison : par région ou par département 
+
     const Metriquess1 = [
         { type: "Nombre de logements", value: "nb_logements" },
         { type: "Loyer moyen au m²", value: "loyer_moyen" },
@@ -31,64 +44,43 @@ const GraphCreation = () => {
         { type: "Par région", value: "region" },
     ];
 
+    //  PARTIE 3
+    const Y2Ref = useRef(null); // valeur 2e année de comparaison
+
+    const [selectedRegion, setSelectedRegion] = useState(""); // région sélectionnée
+    const [selectedY1, setSelectedY1] = useState(""); // valeur 1e année de comparaison
+    const [selectedY2, setSelectedY2] = useState(""); // valeur 2e année de comparaison
+
     const filtres = [
         { type: "2021", value: "2021" },
         { type: "2022", value: "2022" },
         { type: "2023", value: "2023" },
     ];
 
-    // titres
-    const titres = ["Type de visualisation", "Données", "Filtres"];
-
-    // states
-    const [activeGraphType, setActiveGraphType] = useState(null); // Changé à null pour forcer le choix
-
-    const [departementvalues, setDepartementvalues] = useState([]);
-    const [regionvalues, setRegionvalues] = useState([]);
-    const [selectedRegion, setSelectedRegion] = useState("");
-
-    const chartRef = useRef(null);
-
-    const [selectedMetriques, setSelectedMetriques] = useState("");
-    const [selectedAxe, setSelectedAxe] = useState("");
-
-    const [selectedY1, setSelectedY1] = useState("");
-    const [selectedY2, setSelectedY2] = useState("");
-    const Y2Ref = useRef(null); // Réf pour cibler le second sélecteur d'année
-
-    // fetch de datas :
-
+    //  fetching api
     useEffect(() => {
-        const fetchData = async () => { // fetchdata = fonction asynchrone ( async ) qui récupère les données
+        const fetchData = async () => {
             try {
-                // await = attend que les données soient récupérées, promise.all = exécute les deux fonctions en même temps
-                // deptsRes = données des départements, regionsRes = données des régions
                 const [deptsRes, regionsRes] = await Promise.all([
-                    getDepartementsChoixZone(), // getDepartementsChoixZone = fonction dans departementService.js
-                    getRegionsChoixZone() // getRegionsChoixZone = fonction dans regionService.js
+                    getDepartementsChoixZone(), // ramène : nom_dept
+                    getRegionsChoixZone() // ramène : nom_region
                 ]);
-                setDepartementvalues(deptsRes.data); // setDepartementvalues = fonction qui met à jour les données des départements
-                setRegionvalues(regionsRes.data); // setRegionvalues = fonction qui met à jour les données des régions
-            } catch (error) { // catch = gère les erreurs
+                setDepartementvalues(deptsRes); // deptsRes = []
+                setRegionvalues(regionsRes); // regionsRes = []
+            } catch (error) {
                 console.error("Erreur lors du fetch", error);
             }
         };
-        fetchData(); // fetchData = fonction asynchrone ( async ) qui récupère les données
+        fetchData();
     }, []);
 
-    // filtre région
-    let regions = [];
-    if (selectedAxe === "departement") {
-        regions = departementvalues;
-    } else if (selectedAxe === "region") {
-        regions = regionvalues;
-    }
+    // gère le changement de région / depart choisi
+    const handleRegionChange = (e) => setSelectedRegion(e.target.value);
 
-    const handleRegionChange = (e) => {
-        const value = e.target.value;
-        setSelectedRegion(value);
-    };
 
+
+    // calcul de la valeur 2e année de comparaison
+    // si V1 = 2022, V2 ne peut pas être à 2021
     const handleY1Change = (e) => {
         const value = e.target.value;
         setSelectedY1(value);
@@ -97,39 +89,13 @@ const GraphCreation = () => {
         }
     };
 
-    // Fonction pour remettre à zéro les deux années sélectionnées 
+    // met les valeurs Y1 Y2 a null vide
     const handleResetYs = () => {
         setSelectedY1("");
         setSelectedY2("");
     };
 
-    // Effet pour donner le focus au second sélecteur dès que la première année est choisie = focus : élément en attente d'action
-    useEffect(() => {
-        if (selectedY1 && !selectedY2) {
-            Y2Ref.current?.focus();
-        }
-    }, [selectedY1]);
-
-    // vérif des étapes
-
-    const etape1 = useRef(null);
-    const etape2 = useRef(null);
-    const etape3 = useRef(null);
-    const etape4 = useRef(null);
-
-    // Vérif des étapes
-    const isEtape1Complete = activeGraphType !== null;
-    const isEtape2Complete = isEtape1Complete && selectedMetriques !== "" && selectedAxe !== "";
-    const isEtape3Complete = isEtape2Complete && selectedY1 !== "" && selectedY2 !== "" && selectedRegion !== "";
-    const isEtape4Complete = isEtape3Complete;
-
-    const suivietapes = (EtapePrecedenteComplete) => {
-        if (!EtapePrecedenteComplete) return "p-4 bg-[#111822]/20 rounded-lg opacity-30 pointer-events-none grayscale transition-all duration-500";
-        return "p-4 bg-[#111822] rounded-lg transition-all duration-500";
-    };
-
-    // fonction pour reset
-
+    // reset des setters
     const reset = () => {
         setActiveGraphType(null);
         setSelectedMetriques("");
@@ -139,15 +105,31 @@ const GraphCreation = () => {
         setSelectedRegion("");
     };
 
+    const regionsAfficher = selectedAxe === "departement" ? departementvalues : (selectedAxe === "region" ? regionvalues : []);
+
+    //  GESTION DES ÉTAPES 
+    const isEtape1Complete = activeGraphType !== null; // étape 1 = choix du graphique
+    const isEtape2Complete = isEtape1Complete && selectedMetriques !== "" && selectedAxe !== ""; // étape 2 = axe comparaison
+    const isEtape3Complete = isEtape2Complete && selectedY1 !== "" && selectedY2 !== "" && selectedRegion !== ""; // étape 3 = choix des filtres
+    const isEtape4Complete = isEtape3Complete; // étape 4 = export
+
+    const getEtapeClassName = (isUnlocked) => {
+        const baseClasses = "p-4 rounded-lg transition-all duration-500";
+        if (!isUnlocked) {
+            return `${baseClasses} bg-[#111822]/80 opacity-30 pointer-events-none grayscale`;
+        }
+        return `${baseClasses} bg-[#111822]`;
+    };
+
     return (
         <div className="h-screen flex flex-col overflow-hidden bg-[#111822]">
             <Navbar />
             <section className="flex-1 overflow-hidden">
                 <div className="grid grid-cols-3 h-full gap-0">
+                    {/* SIDEBAR DE CONFIGURATION */}
                     <div className="bg-[#1A2432] h-full flex flex-col border-r border-[#334155] overflow-hidden">
                         <div className="flex-1 overflow-y-auto p-6 space-y-8">
-
-                            {/* titre */}
+                            {/* En-tête */}
                             <div className="space-y-2">
                                 <h1 className="text-2xl text-white font-bold tracking-tight">Concevez et Exportez</h1>
                                 <p className="text-[#D2D2D2] text-sm">
@@ -155,39 +137,33 @@ const GraphCreation = () => {
                                 </p>
                             </div>
 
-                            <section ref={etape1} id="etape1" className={suivietapes(true)}>
-
-                                {/* choix du graphe */}
+                            {/* ÉTAPE 1 : TYPE DE GRAPHE */}
+                            <section className={getEtapeClassName(true)}>
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3">
                                         <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm">1</span>
                                         <h2 className="text-white font-semibold uppercase text-xs tracking-wider">{titres[0]}</h2>
                                     </div>
                                     <div className="grid grid-cols-3 gap-3">
-                                        {graphType.map((g) => {
-                                            const isActive = activeGraphType?.type === g.type; // Vérifie si le type actif correspond au type du graphique
-                                            return (
-                                                <button
-                                                    key={g.type}
-                                                    className={`flex flex-col items-center gap-2 p-3 rounded-xl cursor-pointer transition-all border border-white/10 ${isActive
-                                                        ? "bg-[#133479] border-2 border-blue-500"
-                                                        : "bg-[#111822] border-2 border-transparent hover:bg-[#1e293b]"
-                                                        }`}
-                                                    onClick={() => setActiveGraphType(g)}
-                                                >
-                                                    <img src={g.icon} alt={g.type} className="w-8 h-8 object-contain" />
-                                                    <span className="text-[10px] text-white font-medium uppercase text-center">{g.type}</span>
-                                                </button>
-                                            );
-                                        })}
+                                        {graphType.map((g) => (
+                                            <button
+                                                key={g.type}
+                                                className={`flex flex-col items-center gap-2 p-3 rounded-xl cursor-pointer transition-all border ${activeGraphType?.type === g.type
+                                                    ? "bg-[#133479] border-blue-500 border-2"
+                                                    : "bg-[#111822] border-white/10 border-2 hover:bg-[#1e293b]"
+                                                    }`}
+                                                onClick={() => setActiveGraphType(g)}
+                                            >
+                                                <img src={g.icon} alt={g.type} className="w-8 h-8 object-contain" />
+                                                <span className="text-[10px] text-white font-medium uppercase text-center">{g.type}</span>
+                                            </button>
+                                        ))}
                                     </div>
                                 </div>
-
                             </section>
 
-                            <section ref={etape2} id="etape2" className={suivietapes(isEtape1Complete)}>
-
-                                {/* Étape 2 : Données */}
+                            {/* ÉTAPE 2 : DONNÉES */}
+                            <section className={getEtapeClassName(isEtape1Complete)}>
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3">
                                         <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm">2</span>
@@ -222,12 +198,10 @@ const GraphCreation = () => {
                                         </div>
                                     </div>
                                 </div>
-
                             </section>
 
-                            <section ref={etape3} id="etape3" className={suivietapes(isEtape2Complete)}>
-
-                                {/* Étape 3 : Filtres */}
+                            {/* ÉTAPE 3 : FILTRES */}
+                            <section className={getEtapeClassName(isEtape2Complete)}>
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3">
                                         <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white font-bold text-sm">3</span>
@@ -245,8 +219,8 @@ const GraphCreation = () => {
                                             <div className="flex items-center gap-2">
                                                 <select
                                                     className="flex-1 p-2 bg-[#111822] text-white text-xs rounded border border-[#334155] outline-none cursor-pointer"
-                                                    value={selectedY1}
-                                                    onChange={handleY1Change}
+                                                    value={selectedY1} // première selection de l'année
+                                                    onChange={handleY1Change} // s'occupe du changement
                                                 >
                                                     <option value="" hidden>De...</option>
                                                     {filtres.map((f) => (
@@ -255,11 +229,11 @@ const GraphCreation = () => {
                                                 </select>
                                                 <span className="text-blue-500">→</span>
                                                 <select
-                                                    ref={Y2Ref}
+                                                    ref={Y2Ref} // year sur la 2e selection de l'année
                                                     className="flex-1 p-2 bg-[#111822] text-white text-xs rounded border border-[#334155] outline-none cursor-pointer disabled:opacity-30"
-                                                    value={selectedY2}
+                                                    value={selectedY2} // valeur 2 séléctionné
                                                     onChange={(e) => setSelectedY2(e.target.value)}
-                                                    disabled={!selectedY1}
+                                                    disabled={!selectedY1} // désactive le select si pas de valeur 1
                                                 >
                                                     <option value="" hidden>{selectedY1 ? "À..." : "---"}</option>
                                                     {filtres
@@ -279,33 +253,45 @@ const GraphCreation = () => {
                                                 onChange={handleRegionChange}
                                             >
                                                 <option value="" hidden>Choisir une zone...</option>
-                                                <option value="france">Toute la France</option>
-                                                {regions.map((r) => {
-                                                    const key = r.id_region || r.code_dept;
-                                                    const name = r.nom_region || r.nom_dept;
+                                                {regionsAfficher.map((r) => {
+
+                                                    // si departement = code_dept, si region = id_region
+                                                    const isDept = selectedAxe === "departement";
+                                                    // pas besoin de répéter pour région vu que on utilise ?
+
+                                                    // clé = code_dept ou id_region
+                                                    const key = isDept ? r.code_dept : r.id_region;
+                                                    // nom = nom_dept ou nom_region
+                                                    const name = isDept ? r.nom_dept : capitalfirstletter(r.nom_region);
+
+                                                    // si existe pas = affiche pas
+                                                    if (!name) return null;
+
                                                     return (
-                                                        <option key={key} value={key}>{name}</option>
+                                                        <option key={`${selectedAxe}-${key}`} value={key}>
+                                                            {name}
+                                                        </option>
                                                     );
                                                 })}
                                             </select>
                                         </div>
                                     </div>
                                 </div>
-
                             </section>
 
-
-                            {/* Export fixe en bas */}
-                            {/* pointer-events-auto = permet de cliquer sur le bouton, pointer-events-none = permet de ne pas cliquer sur le bouton */}
-                            <span ref={etape4} className={isEtape4Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"}>
-                                <BtnExport chartRef={chartRef} />
-                            </span>
-                            <span ref={etape4} className={isEtape4Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"}>
-                                <BtnReset reset={reset} />
-                            </span>
+                            {/* ACTIONS EN BAS */}
+                            <div className="flex flex-col gap-2 pt-4 border-t border-[#334155]">
+                                <div className={isEtape4Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"}>
+                                    <BtnExport chartRef={chartRef} />
+                                </div>
+                                <div className={isEtape4Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"}>
+                                    <BtnReset reset={reset} />
+                                </div>
+                            </div>
                         </div>
                     </div>
 
+                    {/* ZONE DE VISUALISATION */}
                     <GraphChart ref={chartRef} activeGraphType={activeGraphType} />
                 </div>
             </section>

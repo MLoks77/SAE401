@@ -21,7 +21,7 @@ const BtnExport = ({ chartRef }) => {
     }
     return (
         <div className="p-4 border-t border-[#334155] bg-[#1A2432]">
-            <button onClick={exportpng} className="w-full bg-blue-800 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors cursor-pointer active:scale-[0.98]">
+            <button onClick={exportpng} className="w-full bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 rounded-lg transition-colors cursor-pointer active:scale-[0.98]">
                 Exporter la visualisation
             </button>
         </div>
