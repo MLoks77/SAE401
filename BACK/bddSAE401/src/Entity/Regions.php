@@ -12,6 +12,7 @@ namespace App\Entity;
 use App\Repository\RegionsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RegionsRepository::class)]
@@ -20,9 +21,11 @@ class Regions
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['region:read', 'dept:read'])]
     private ?int $id_region = null;
 
     #[ORM\Column(length: 150)]
+    #[Groups(['region:read', 'dept:read'])]
     private ?string $nom_region = null;
 
     #[ORM\OneToMany(targetEntity: Departements::class, mappedBy: 'id_region')]

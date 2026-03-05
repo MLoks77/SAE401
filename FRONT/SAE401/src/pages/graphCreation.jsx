@@ -1,8 +1,10 @@
-import Navbar from "../components/navbar";
 import { useState, useRef, useEffect } from "react";
 
+// API
+import { getDepartementsChoixZone, getRegionsChoixZone } from "../services/ServicesPages/GraphCreation";
+// composants
+import Navbar from "../components/navbar";
 import GraphChart from "../components/creationexport/graphChart";
-
 import BtnReset from "../components/creationexport/btnReset";
 import BtnExport from "../components/creationexport/btnExport";
 
@@ -16,11 +18,6 @@ const GraphCreation = () => {
         { type: "Courbe", icon: "./images/graphicons/courbe_b.png" },
     ];
 
-    const [activeGraphType, setActiveGraphType] = useState(null); // Changé à null pour forcer le choix
-
-    // titres
-    const titres = ["Type de visualisation", "Données", "Filtres"];
-
     // liste tableaux metriques
     const Metriquess1 = [
         { type: "Nombre de logements", value: "nb_logements" },
@@ -32,9 +29,7 @@ const GraphCreation = () => {
     const axecomparaison = [
         { type: "Par département", value: "departement" },
         { type: "Par région", value: "region" },
-        { type: "Par type de logement", value: "type_logement" },
     ];
-    // filtres
 
     const filtres = [
         { type: "2021", value: "2021" },
@@ -42,12 +37,57 @@ const GraphCreation = () => {
         { type: "2023", value: "2023" },
     ];
 
+    // titres
+    const titres = ["Type de visualisation", "Données", "Filtres"];
+
+    // states
+    const [activeGraphType, setActiveGraphType] = useState(null); // Changé à null pour forcer le choix
+
+    const [departementvalues, setDepartementvalues] = useState([]);
+    const [regionvalues, setRegionvalues] = useState([]);
+    const [selectedRegion, setSelectedRegion] = useState("");
+
+    const chartRef = useRef(null);
+
     const [selectedMetriques, setSelectedMetriques] = useState("");
     const [selectedAxe, setSelectedAxe] = useState("");
 
     const [selectedY1, setSelectedY1] = useState("");
     const [selectedY2, setSelectedY2] = useState("");
     const Y2Ref = useRef(null); // Réf pour cibler le second sélecteur d'année
+
+    // fetch de datas :
+
+    useEffect(() => {
+        const fetchData = async () => { // fetchdata = fonction asynchrone ( async ) qui récupère les données
+            try {
+                // await = attend que les données soient récupérées, promise.all = exécute les deux fonctions en même temps
+                // deptsRes = données des départements, regionsRes = données des régions
+                const [deptsRes, regionsRes] = await Promise.all([
+                    getDepartementsChoixZone(), // getDepartementsChoixZone = fonction dans departementService.js
+                    getRegionsChoixZone() // getRegionsChoixZone = fonction dans regionService.js
+                ]);
+                setDepartementvalues(deptsRes.data); // setDepartementvalues = fonction qui met à jour les données des départements
+                setRegionvalues(regionsRes.data); // setRegionvalues = fonction qui met à jour les données des régions
+            } catch (error) { // catch = gère les erreurs
+                console.error("Erreur lors du fetch", error);
+            }
+        };
+        fetchData(); // fetchData = fonction asynchrone ( async ) qui récupère les données
+    }, []);
+
+    // filtre région
+    let regions = [];
+    if (selectedAxe === "departement") {
+        regions = departementvalues;
+    } else if (selectedAxe === "region") {
+        regions = regionvalues;
+    }
+
+    const handleRegionChange = (e) => {
+        const value = e.target.value;
+        setSelectedRegion(value);
+    };
 
     const handleY1Change = (e) => {
         const value = e.target.value;
@@ -70,34 +110,9 @@ const GraphCreation = () => {
         }
     }, [selectedY1]);
 
-    // filtre région
-
-    const regions = [
-        { type: "Auvergne-Rhône-Alpes", value: "auvergne-rhone-alpes" },
-        { type: "Bourgogne-Franche-Comté", value: "bourgogne-franche-comte" },
-        { type: "Bretagne", value: "bretagne" },
-        { type: "Centre-Val de Loire", value: "centre-val-de-loire" },
-        { type: "Corse", value: "corse" },
-        { type: "Grand Est", value: "grand-est" },
-        { type: "Hauts-de-France", value: "hauts-de-france" },
-        { type: "Île-de-France", value: "ile-de-france" },
-        { type: "Normandie", value: "normandie" },
-        { type: "Nouvelle-Aquitaine", value: "nouvelle-aquitaine" },
-        { type: "Occitanie", value: "occitanie" },
-        { type: "Pays de la Loire", value: "pays-de-la-loire" },
-        { type: "Provence-Alpes-Côte d'Azur", value: "provence-alpes-cote-d-azur" },
-    ];
-
-    const [selectedRegion, setSelectedRegion] = useState("");
-    const chartRef = useRef(null);
-
-    const handleRegionChange = (e) => {
-        const value = e.target.value;
-        setSelectedRegion(value);
-    };
+    // vérif des étapes
 
     const etape1 = useRef(null);
-
     const etape2 = useRef(null);
     const etape3 = useRef(null);
     const etape4 = useRef(null);
@@ -105,7 +120,6 @@ const GraphCreation = () => {
     // Vérif des étapes
     const isEtape1Complete = activeGraphType !== null;
     const isEtape2Complete = isEtape1Complete && selectedMetriques !== "" && selectedAxe !== "";
-    // Note: selectedRegion !== "" car "Toute la France" a maintenant une valeur "all"
     const isEtape3Complete = isEtape2Complete && selectedY1 !== "" && selectedY2 !== "" && selectedRegion !== "";
     const isEtape4Complete = isEtape3Complete;
 
@@ -266,9 +280,13 @@ const GraphCreation = () => {
                                             >
                                                 <option value="" hidden>Choisir une zone...</option>
                                                 <option value="france">Toute la France</option>
-                                                {regions.map((r) => (
-                                                    <option key={r.type} value={r.value}>{r.type}</option>
-                                                ))}
+                                                {regions.map((r) => {
+                                                    const key = r.id_region || r.code_dept;
+                                                    const name = r.nom_region || r.nom_dept;
+                                                    return (
+                                                        <option key={key} value={key}>{name}</option>
+                                                    );
+                                                })}
                                             </select>
                                         </div>
                                     </div>

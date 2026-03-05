@@ -1,10 +1,10 @@
 nelmio_cors:
     defaults:
-        origin_regex: true
-        allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
-        allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
-        allow_headers: ['Content-Type', 'Authorization']
-        expose_headers: ['Link']
-        max_age: 3600
+        allow_origin: ['*'] # autorise toutes les origines
+        allow_methods: ['GET'] # autorise toutes les méthodes
+        allow_headers: ['*'] # autorise tous les headers
+        expose_headers: ['Link'] # autorise tous les headers à être exposés
+        max_age: 3600 # autorise le cache pendant 1 heure
     paths:
+        '^/api/': null
         '^/': null

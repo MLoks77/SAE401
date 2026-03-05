@@ -7,12 +7,11 @@ namespace App\Controller\API;
 use App\Repository\LogementsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/api/logements', name: 'api_logements_')]
 class LogementController extends AbstractController
 {
-    #[Route('', methods: ['GET'], name: 'get_logements')]
+    #[Route('/api/logements', methods: ['GET'], name: 'api_logements_get')]
     public function index(LogementsRepository $repository): JsonResponse
     {
         return $this->json($repository->findAll());

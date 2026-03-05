@@ -7,12 +7,11 @@ namespace App\Controller\API;
 use App\Repository\PopulationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/api/population', name: 'api_population_')]
 class PopulationController extends AbstractController
 {
-    #[Route('', methods: ['GET'], name: 'get_population')]
+    #[Route('/api/population', methods: ['GET'], name: 'api_population_get')]
     public function index(PopulationRepository $repository): JsonResponse
     {
         return $this->json($repository->findAll());
