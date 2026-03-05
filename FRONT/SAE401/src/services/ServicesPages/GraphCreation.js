@@ -8,7 +8,7 @@ export const getDepartementsChoixZone = async (code_dept, nom_dept, id_region) =
     const requete = await getDepartements(code_dept, nom_dept, id_region); // await = attend
 
     // trie
-    return requete.data.sort((a, b) => a.nom_dept.localeCompare(b.nom_dept)); // localeCompare = compare les chaînes de caractères
+    return requete.data.sort((a, b) => a.nom_dept.localeCompare(b.nom_dept)); // localeCompare = compare les chaînes de caractères, a -> b = ordre croissant
 };
 
 export const getRegionsChoixZone = async (id_region, nom_region) => {

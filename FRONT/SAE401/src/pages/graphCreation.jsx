@@ -258,11 +258,10 @@ const GraphCreation = () => {
                                                     // si departement = code_dept, si region = id_region
                                                     const isDept = selectedAxe === "departement";
                                                     // pas besoin de répéter pour région vu que on utilise ?
-
                                                     // clé = code_dept ou id_region
                                                     const key = isDept ? r.code_dept : r.id_region;
                                                     // nom = nom_dept ou nom_region
-                                                    const name = isDept ? r.nom_dept : capitalfirstletter(r.nom_region);
+                                                    const name = isDept ? r.code_dept + " - " + r.nom_dept : capitalfirstletter(r.nom_region);
 
                                                     // si existe pas = affiche pas
                                                     if (!name) return null;
