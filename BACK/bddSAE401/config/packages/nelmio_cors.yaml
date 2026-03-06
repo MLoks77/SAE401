@@ -8,3 +8,5 @@ nelmio_cors:
     paths:
         '^/api/': null
         '^/': null
+
+# composer require nelmio/cors-bundle

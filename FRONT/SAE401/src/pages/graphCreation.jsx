@@ -261,7 +261,7 @@ const GraphCreation = () => {
                                                     // clé = code_dept ou id_region
                                                     const key = isDept ? r.code_dept : r.id_region;
                                                     // nom = nom_dept ou nom_region
-                                                    const name = isDept ? r.code_dept + " - " + r.nom_dept : capitalfirstletter(r.nom_region);
+                                                    const name = isDept ? r.code_dept + " - " + capitalfirstletter(r.nom_dept) : capitalfirstletter(r.nom_region);
 
                                                     // si existe pas = affiche pas
                                                     if (!name) return null;
