@@ -1,4 +1,3 @@
-
 // bouton reset
 const BtnReset = ({ reset }) => {
     return (
