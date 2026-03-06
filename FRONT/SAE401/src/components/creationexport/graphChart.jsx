@@ -3,7 +3,7 @@ import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import favicon from "/favicon/favicon.ico";
 
 // const [activeGraphType, setActiveGraphType] = useState(graphType[0]); // utilise le premier graph : historigramme
-// activeGraphType est utilisé comme un props du parent, donc sa reçoit le type de graph des 3 boutons
+// activeGraphType est utilisé comme un props du parent, donc ça reçoit le type de graph des 3 boutons
 const GraphChart = forwardRef(({ activeGraphType }, ref) => {
     const chartRef = useRef(null);
     const chartItem = useRef(null); // const graph pour l'export en image
