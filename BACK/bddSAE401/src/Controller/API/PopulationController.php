@@ -7,6 +7,7 @@ namespace App\Controller\API;
 use App\Repository\PopulationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
 class PopulationController extends AbstractController
@@ -22,6 +23,9 @@ class PopulationController extends AbstractController
         $variation_pop = $request->query->get('variation_pop');
         $solde_naturel = $request->query->get('solde_naturel');
         $solde_migratoire = $request->query->get('solde_migratoire');
+
+        $accroissementtotal = $solde_naturel + $solde_migratoire;
+
         $pop_moins_20ans = $request->query->get('pop_moins_20ans');
         $pop_plus_60ans = $request->query->get('pop_plus_60ans');
         $taux_chomage = $request->query->get('taux_chomage');
@@ -51,6 +55,9 @@ class PopulationController extends AbstractController
         }
         if ($solde_migratoire) {
             $populationdatas['solde_migratoire'] = $solde_migratoire;
+        }
+        if ($accroissementtotal) {
+            $populationdatas['accroissementtotal'] = $accroissementtotal;
         }
         if ($pop_moins_20ans) {
             $populationdatas['pop_moins_20ans'] = $pop_moins_20ans;
