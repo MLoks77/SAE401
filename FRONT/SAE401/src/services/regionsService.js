@@ -8,11 +8,10 @@ const regionsService = axios.create({
     }
 });
 
-export const getRegions = (id_region, nom_region) => {
+export const getRegions = (dataRegions) => {
     return regionsService.get('regions', {
         params: {
-            id_region: id_region,
-            nom_region: nom_region
+            dataRegions: dataRegions
         }
     });
 };

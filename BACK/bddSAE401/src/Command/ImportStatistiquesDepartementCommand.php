@@ -166,12 +166,10 @@ class ImportStatistiquesDepartementCommand extends Command
                         'annee' => (int) ($data['annee'] ?? 0)
                     ]);
                 if ($existing) {
-                    // if population record exists and we only import population, skip entire row
-                    if (!$hasLogements) {
-                        continue;
-                    }
+                    $hasPopulation = false;
                 }
             }
+
             if ($hasLogements) {
                 $existingLog = $this->em
                     ->getRepository(Logements::class)
@@ -180,11 +178,13 @@ class ImportStatistiquesDepartementCommand extends Command
                         'annee' => (int) ($data['annee'] ?? 0)
                     ]);
                 if ($existingLog) {
-                    // if logements exists and no population to add, skip
-                    if (!$hasPopulation) {
-                        continue;
-                    }
+                    $hasLogements = false;
                 }
+            }
+
+            // if both are handled or missing, skip entire row
+            if (!$hasPopulation && !$hasLogements) {
+                continue;
             }
 
             if ($hasPopulation) {

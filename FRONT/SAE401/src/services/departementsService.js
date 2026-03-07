@@ -8,12 +8,10 @@ const departementsService = axios.create({
     }
 });
 
-export const getDepartements = (code_dept, nom_dept, id_region) => {
+export const getDepartements = (dataDepartements) => {
     return departementsService.get('departements', {
         params: {
-            code_dept: code_dept,
-            nom_dept: nom_dept,
-            id_region: id_region
+            dataDepartements: dataDepartements
         }
     });
 };

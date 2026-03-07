@@ -1,13 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { capitalfirstletter } from "../services/fonctions";
 
-// API
-import { getDepartementsChoixZone, getRegionsChoixZone } from "../services/ServicesPages/GraphCreation";
 // composants
 import Navbar from "../components/navbar";
 import GraphChart from "../components/creationexport/graphChart";
 import BtnReset from "../components/creationexport/btnReset";
 import BtnExport from "../components/creationexport/btnExport";
+
+
 
 // par maxime derènes
 
@@ -32,11 +32,17 @@ const GraphCreation = () => {
     const [selectedMetriques, setSelectedMetriques] = useState(""); // métriques
     const [selectedAxe, setSelectedAxe] = useState(""); // axe de comparaison : par région ou par département 
 
+    // choix metrique
     const Metriquess1 = [
         { type: "Nombre de logements", value: "nb_logements" },
-        { type: "Loyer moyen au m²", value: "loyer_moyen" },
-        { type: "Surface moyenne", value: "surface_moyenne" },
-        { type: "Taux de vacance", value: "taux_vacance" },
+        { type: "Taux de logements sociaux", value: "taux_logements_sociaux" },
+        { type: "Taux de logements vacants", value: "taux_logements_vacants" },
+        { type: "Nombre d'habitants", value: "nb_habitants" },
+        { type: "Accroissement population", value: "accroissement_population" },
+        { type: "Population moins de 20 ans", value: "pop_moins_20ans" },
+        { type: "Population plus de 60 ans", value: "pop_plus_60ans" },
+        { type: "Taux de chomage", value: "taux_chomage" },
+        { type: "Taux de pauvreté", value: "taux_pauvrete" },
     ];
 
     const axecomparaison = [
@@ -56,23 +62,6 @@ const GraphCreation = () => {
         { type: "2022", value: "2022" },
         { type: "2023", value: "2023" },
     ];
-
-    //  fetching api
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const [deptsRes, regionsRes] = await Promise.all([
-                    getDepartementsChoixZone(), // ramène : nom_dept
-                    getRegionsChoixZone() // ramène : nom_region
-                ]);
-                setDepartementvalues(deptsRes); // deptsRes = []
-                setRegionvalues(regionsRes); // regionsRes = []
-            } catch (error) {
-                console.error("Erreur lors du fetch", error);
-            }
-        };
-        fetchData();
-    }, []);
 
     // gère le changement de région / depart choisi
     const handleRegionChange = (e) => setSelectedRegion(e.target.value);
@@ -283,7 +272,7 @@ const GraphCreation = () => {
                                 <div className={isEtape4Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"}>
                                     <BtnExport chartRef={chartRef} />
                                 </div>
-                                <div className={isEtape4Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"}>
+                                <div className={isEtape1Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"}>
                                     <BtnReset reset={reset} />
                                 </div>
                             </div>
@@ -291,7 +280,18 @@ const GraphCreation = () => {
                     </div>
 
                     {/* ZONE DE VISUALISATION */}
-                    <GraphChart ref={chartRef} activeGraphType={activeGraphType} isReady={isEtape3Complete} />
+                    <GraphChart
+                        ref={chartRef}
+                        activeGraphType={activeGraphType}
+                        isReady={isEtape3Complete}
+                        selectedMetriques={selectedMetriques}
+                        selectedAxe={selectedAxe}
+                        selectedRegion={selectedRegion}
+                        selectedY1={selectedY1}
+                        selectedY2={selectedY2}
+                        setDepartementvalues={setDepartementvalues}
+                        setRegionvalues={setRegionvalues}
+                    /> {/* le graphique va récupérer toute les données pour pouvoir afficher ce que l'on souhaite */}
                 </div>
             </section>
         </div>

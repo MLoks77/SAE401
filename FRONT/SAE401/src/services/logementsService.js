@@ -8,15 +8,10 @@ const logementsService = axios.create({
     }
 });
 
-export const getLogements = (id_logement, annee, code_dept, nb_logements, taux_logements_sociaux, taux_logements_vacants) => {
+export const getLogements = (datalogements) => {
     return logementsService.get('logements', {
         params: {
-            id_logement: id_logement,
-            annee: annee,
-            code_dept: code_dept,
-            nb_logements: nb_logements,
-            taux_logements_sociaux: taux_logements_sociaux,
-            taux_logements_vacants: taux_logements_vacants
+            data: datalogements
         }
     });
 };

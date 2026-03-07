@@ -2,9 +2,36 @@ import Chart from "chart.js/auto";
 import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import favicon from "/favicon/favicon.ico";
 
-// const [activeGraphType, setActiveGraphType] = useState(graphType[0]); // utilise le premier graph : historigramme
-// activeGraphType est utilisé comme un props du parent, donc ça reçoit le type de graph des 3 boutons
-const GraphChart = forwardRef(({ activeGraphType, isReady }, ref) => {
+// API
+import {
+    getDepartementsChoixZone,
+    getRegionsChoixZone,
+    getNbrLogement,
+    getTauxLogementSociaux,
+    getTauxLogementVacants,
+    getNbrHabitants,
+    getAccroissementPopulation,
+    getPopulationMoins20ans,
+    getPopulationPlus60ans,
+    getTauxChomage,
+    getTauxPauvrete
+} from "../../services/ServicesPages/GraphCreation";
+
+
+// ----------------- GRAPH -----------------
+
+// forward ref permet de pointer des données du parent vers le composant
+const GraphChart = forwardRef(({
+    activeGraphType,
+    isReady,
+    selectedMetriques,
+    selectedAxe,
+    selectedRegion,
+    selectedY1,
+    selectedY2,
+    setDepartementvalues,
+    setRegionvalues
+}, ref) => {
     const chartRef = useRef(null);
     const chartItem = useRef(null); // const graph pour l'export en image
 
@@ -15,6 +42,105 @@ const GraphChart = forwardRef(({ activeGraphType, isReady }, ref) => {
             return chartItem.current ? chartItem.current.toBase64Image() : null;
         }
     }));
+
+    //selected metriques
+    // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Statements/switch
+    // switch case, permet de gérer les conditions sans a a voir à spam des if else
+    let dataMetrique = [];
+    switch (selectedMetriques.value) {
+        case "nb_logements":
+            dataMetrique = getNbrLogement(selectedRegion.value);
+            break;
+        case "taux_logements_sociaux":
+            dataMetrique = getTauxLogementSociaux(selectedRegion.value);
+            break;
+        case "taux_logements_vacants":
+            dataMetrique = getTauxLogementVacants(selectedRegion.value);
+            break;
+        case "nb_habitants":
+            dataMetrique = getNbrHabitants(selectedRegion.value);
+            break;
+        case "accroissement_population":
+            dataMetrique = getAccroissementPopulation(selectedRegion.value);
+            break;
+        case "pop_moins_20ans":
+            dataMetrique = getPopulationMoins20ans(selectedRegion.value);
+            break;
+        case "pop_plus_60ans":
+            dataMetrique = getPopulationPlus60ans(selectedRegion.value);
+            break;
+        case "taux_chomage":
+            dataMetrique = getTauxChomage(selectedRegion.value);
+            break;
+        case "taux_pauvrete":
+            dataMetrique = getTauxPauvrete(selectedRegion.value);
+            break;
+        default:
+            break;
+    }
+
+    //selected Axe
+    let dataAxe = [];
+    switch (selectedAxe.value) {
+        case "departement":
+            dataAxe = getDepartement(selectedRegion.value);
+            break;
+        case "region":
+            dataAxe = getRegion(selectedRegion.value);
+            break;
+        default:
+            break;
+    }
+
+    //selected Region / departement
+    let dataRegion = [];
+    switch (selectedRegion.value) {
+        case "departement":
+            dataRegion = getDepartement(selectedRegion.value);
+            break;
+        case "region":
+            dataRegion = getRegion(selectedRegion.value);
+            break;
+        default:
+            break;
+    }
+
+    // choix des années + gestion des données dedans :
+    // le choix des années va impacter sur la taille du graph [ 2021, 2022, 2023 ]
+    const début = Math.min(Number(selectedY1.value), Number(selectedY2.value)); // on prend la plus petite année
+    const fin = Math.max(Number(selectedY1.value), Number(selectedY2.value)); // on prend la plus grande année
+
+    const annees = []; // on stock les années dans un tableau
+
+    for (let year = début; year <= fin; year++) { // on boucle du début à la fin pour remplir le tableau
+        annees.push(year);
+    }
+
+    // dataMetrique = données API, A MODIFIER
+    const dataAffichee = annees.map(annee => {
+        // On cherche la valeur correspondant à l'année dans tes données réelles
+        const record = dataMetrique.find(d => Number(d.annee) === annee);
+        return record ? record.valeur : 0; // Met 0 si l'année n'existe pas
+    });
+
+    //  fetch api pour departement et regions
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [deptsRes, regionsRes] = await Promise.all([
+                    getDepartementsChoixZone(), // ramène : nom_dept
+                    getRegionsChoixZone() // ramène : nom_region
+                ]);
+                setDepartementvalues(deptsRes); // deptsRes = []
+                setRegionvalues(regionsRes); // regionsRes = []
+            } catch (error) {
+                console.error("Erreur lors du fetch", error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // Faire une requête qui prend en compte : l'année, le departement ou la region et la metrique a l'api, ce qui permettra d'afficher ce que l'utilisateur veut
 
     // Initialisation 
     useEffect(() => {
@@ -30,10 +156,10 @@ const GraphChart = forwardRef(({ activeGraphType, isReady }, ref) => {
                 type: activeGraphType?.type === "Histogramme" ? "bar" : activeGraphType?.type === "Camembert" ? "pie" : "line",
                 // données = fictive pour le moment à changer après
                 data: {
-                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                    labels: annees,
                     datasets: [{
                         label: "Données de test",
-                        data: [12, 19, 3, 5, 2, 3],
+                        data: [1, 2, 3],
                         backgroundColor: activeGraphType?.type === "Camembert"
                             ? ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#6366f1", "#8b5cf6"]
                             : "#3b82f6",
@@ -49,15 +175,10 @@ const GraphChart = forwardRef(({ activeGraphType, isReady }, ref) => {
                             labels: { color: "white" } // couleur des légendes
                         }
                     },
-                    scales: activeGraphType?.type !== "Camembert" ? {
+                    scales: activeGraphType?.type !== "Camembert" ? { // si c'est pas camembert
                         y: {
-                            beginAtZero: true, // commence à 0
-                            grid: { color: "rgba(255, 255, 255, 0.1)" }, // couleur des lignes
-                            ticks: { color: "white" } // couleur des axes
-                        },
-                        x: {
-                            grid: { color: "rgba(255, 255, 255, 0.1)" }, // couleur des lignes
-                            ticks: { color: "white" } // couleur des axes
+                            beginAtZero: false, // commence à 0
+                            grid: { color: "rgba(255, 255, 255, 0.1)" },
                         }
                     } : {}
                 }
