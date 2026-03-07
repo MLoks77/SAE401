@@ -1,25 +1,30 @@
 import React, { useState } from "react";
+// composants
+
+import Cartemodal from "../components/carte/Cartemodal";
+
 import Navbar from "../components/navbar";
 import BtnYear from "../components/btnYear";
 import "../css/carte.css";
 
 const Carte = () => {
-    
+
     const [selectedDpt, setSelectedDpt] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const ClickDpt = (e) => {
         const target = e.target;
+        // On vérifie si on a cliqué sur un chemin de département (id commençant par dpt-)
         if (target.tagName === 'path' && target.id && target.id.startsWith('dpt-')) {
             const dptId = target.id.replace('dpt-', '');
             const group = target.parentElement;
+            // On récupère le nom du département dans la balise title du groupe parent
             const dptName = group && group.querySelector('title') ? group.querySelector('title').textContent : `Département ${dptId}`;
-            
+
             setSelectedDpt({ id: dptId, name: dptName });
             setIsModalOpen(true);
         }
     };
-
 
     return (
         <div className="wrapper bg-[#1A1A20]">
@@ -27,12 +32,12 @@ const Carte = () => {
             <BtnYear />
             <div className="carte"> {/* lien vers la carte : https://www.kortic.com/carte-de-france-vectorielle-interactive-et-accessible.html#javascript */}
                 <canvas id="canvas-carte-france" width="800" height="800"></canvas>
-                <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    viewBox="0 0 1200 1080" 
-                    fill="#41484F" 
-                    role="group" 
-                    id="svg-carte-france" 
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 1200 1080"
+                    fill="#41484F"
+                    role="group"
+                    id="svg-carte-france"
                     aria-label="Carte de France vectorielle, départements et s groupés par code INSEE"
                     onClick={ClickDpt}
                 >
@@ -297,31 +302,15 @@ const Carte = () => {
                     </g>
                 </svg>
             </div>
-            
-            {isModalOpen && (
-                <div 
-                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-                    onClick={() => setIsModalOpen(false)}
-                >
-                    <div 
-                        className="bg-[#2A2A35] border border-white/10 p-8 rounded-2xl shadow-2xl max-w-2xl w-full min-h-[300px] relative"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <button 
-                            onClick={() => setIsModalOpen(false)}
-                            className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full"
-                            aria-label="Fermer"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        </button>
 
-                        <h1 className="text-white font-bold uppercase text-xs mb-2">{selectedDpt.name}</h1>
-                        <hr className="border-white/10 mb-2"/>
-                        
-                        
-                    </div>
-                </div>
-            )}
+            <div>
+                <Cartemodal
+                    isOpen={isModalOpen}
+                    selectedDpt={selectedDpt}
+                    onClose={() => setIsModalOpen(false)}
+                />
+            </div>
+
         </div>
     );
 };

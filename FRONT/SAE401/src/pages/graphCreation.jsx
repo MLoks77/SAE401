@@ -34,15 +34,15 @@ const GraphCreation = () => {
 
     // choix metrique
     const Metriquess1 = [
-        { type: "Nombre de logements", value: "nb_logements" },
-        { type: "Taux de logements sociaux", value: "taux_logements_sociaux" },
-        { type: "Taux de logements vacants", value: "taux_logements_vacants" },
-        { type: "Nombre d'habitants", value: "nb_habitants" },
-        { type: "Accroissement population", value: "accroissement" },
-        { type: "Population moins de 20 ans", value: "pop_moins_20ans" },
-        { type: "Population plus de 60 ans", value: "pop_plus_60ans" },
-        { type: "Taux de chomage", value: "taux_chomage" },
-        { type: "Taux de pauvreté", value: "taux_pauvrete" },
+        { type: "Nombre de logements", value: "nb_logements", isPourcent: "non" },
+        { type: "Taux de logements sociaux", value: "taux_logements_sociaux", isPourcent: "oui" },
+        { type: "Taux de logements vacants", value: "taux_logements_vacants", isPourcent: "oui" },
+        { type: "Nombre d'habitants", value: "nb_habitants", isPourcent: "non" },
+        { type: "Accroissement population", value: "accroissement", isPourcent: "non" },
+        { type: "Population moins de 20 ans", value: "pop_moins_20ans", isPourcent: "non" },
+        { type: "Population plus de 60 ans", value: "pop_plus_60ans", isPourcent: "non" },
+        { type: "Taux de chomage", value: "taux_chomage", isPourcent: "oui" },
+        { type: "Taux de pauvreté", value: "taux_pauvrete", isPourcent: "oui" },
     ];
 
     const axecomparaison = [
@@ -278,13 +278,14 @@ const GraphCreation = () => {
                             </div>
                         </div>
                     </div>
-
                     {/* ZONE DE VISUALISATION */}
                     <GraphChart
                         ref={chartRef}
                         activeGraphType={activeGraphType}
                         isReady={isEtape3Complete}
                         selectedMetriques={selectedMetriques}
+                        metriqueLabel={Metriquess1.find(m => m.value === selectedMetriques)?.type || "Valeur"}
+                        isPourcent={Metriquess1.find(m => m.value === selectedMetriques)?.isPourcent === "oui"}
                         selectedAxe={selectedAxe}
                         selectedRegion={selectedRegion}
                         selectedY1={selectedY1}
