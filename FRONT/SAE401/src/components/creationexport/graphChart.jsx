@@ -24,6 +24,7 @@ const GraphChart = forwardRef(({
     isPourcent,
     selectedAxe,
     selectedRegion,
+    selectedZoneName,
     selectedY1,
     selectedY2,
     setDepartementvalues,
@@ -110,24 +111,26 @@ const GraphChart = forwardRef(({
 
     }, [selectedMetriques, selectedAxe, selectedRegion, selectedY1, selectedY2, isReady]);
 
-    // calcul du choix de l'année
-    const annees = useMemo(() => {
+    // On calcule les années et les données filtrées (on exclut les 0 ou les données manquantes)
+    const filteredChartData = useMemo(() => {
         const début = Math.min(Number(selectedY1), Number(selectedY2));
         const fin = Math.max(Number(selectedY1), Number(selectedY2));
-        const results = [];
-        for (let year = début; year <= fin; year++) {
-            results.push(year);
-        }
-        return results;
-    }, [selectedY1, selectedY2]);
+        const labels = [];
+        const values = [];
 
-    // données affichées suivant l'annee
-    const dataAffichee = useMemo(() => {
-        return annees.map(annee => {
-            const record = chartData.find(d => Number(d.annee) === annee);
-            return record ? record[selectedMetriques] : 0;
-        });
-    }, [annees, chartData, selectedMetriques]);
+        for (let year = début; year <= fin; year++) {
+            const record = chartData.find(d => Number(d.annee) === year);
+            const value = record ? record[selectedMetriques] : 0;
+
+            // On n'ajoute que si la valeur n'est pas 0 (ou null/undefined)
+            if (value && value !== 0) {
+                labels.push(year);
+                values.push(value);
+            }
+        }
+
+        return { labels, values };
+    }, [selectedY1, selectedY2, chartData, selectedMetriques]);
 
     // export du graphique
     useImperativeHandle(ref, () => ({
@@ -135,7 +138,7 @@ const GraphChart = forwardRef(({
     }));
 
     useEffect(() => {
-        if (chartRef.current && activeGraphType && isReady && chartData.length > 0) { // on charge que si on a les données
+        if (chartRef.current && activeGraphType && isReady && filteredChartData.labels.length > 0) { // on charge que si on a les données filtrées
             if (chartItem.current) {
                 chartItem.current.destroy();
             }
@@ -144,30 +147,47 @@ const GraphChart = forwardRef(({
             chartItem.current = new Chart(ctx, {
                 type: activeGraphType?.type === "Histogramme" ? "bar" : activeGraphType?.type === "Camembert" ? "pie" : "line",
                 data: {
-                    labels: annees,
+                    labels: filteredChartData.labels,
                     datasets: [{
                         label: metriqueLabel,
-                        data: dataAffichee,
+                        data: filteredChartData.values,
                         backgroundColor: (() => {
-                            const palette = ["#370ACA", "#F3E200", "#C51F1F"];
+                            const palette = ["#e76a27ff", "#323aa4ff", "#C51F1F"];
 
                             if (activeGraphType?.type === "Camembert" || activeGraphType?.type === "Histogramme") {
-                                return annees.map((_, i) => palette[i % palette.length]);
+                                return filteredChartData.labels.map((_, i) => palette[i % palette.length]);
                             }
 
-                            return "rgba(59, 130, 246, 0.5)";
+                            return "rgba(73, 75, 79, 0.8)";
                         })(),
                         borderColor: "white",
                         borderWidth: 2,
-                        pointRadius: 20,
-                        fill: false
+                        pointRadius: 5,
+                        fill: "white",
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { labels: { color: "white" } },
+                        title: {
+                            display: true,
+                            text: `${selectedZoneName} / ${metriqueLabel}`,
+                            color: 'white',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: 10,
+                                bottom: 30
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                color: "white",
+                            }
+                        },
                         tooltip: {
                             callbacks: {
                                 label: (valeur) => {
@@ -190,6 +210,19 @@ const GraphChart = forwardRef(({
                                     return label;
                                 }
                             }
+                        },
+                        // bibliothèque datalabels
+                        datalabels: {
+                            color: '#ecececff', // couleur des datalabels de la biblio datalabels
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            },
+                            align: 'bottom',
+                            offset: 15,
+                            formatter: (value) => {
+                                return value + (isPourcent ? " %" : "");
+                            }
                         }
                     },
                     scales: activeGraphType?.type !== "Camembert" ? {
@@ -210,30 +243,29 @@ const GraphChart = forwardRef(({
                 }
             });
         }
-    }, [activeGraphType, isReady, chartData, dataAffichee, annees, selectedMetriques]);
+    }, [activeGraphType, isReady, chartData, filteredChartData, selectedMetriques]);
 
     return (
-        <div className="col-span-2 bg-[#111822] p-8 h-full flex flex-col items-center justify-center">
+        <div className="col-span-2 bg-[#111822] p-8 h-full flex flex-col">
             {isReady ? (
-                <div className="flex-1 relative min-h-0 w-full flex items-center justify-center">
+                <div className="flex-1 relative w-full flex items-center justify-center">
                     {isLoading && (
-                        <div className="absolute inset-0 z-10 bg-[#111822]/40 flex items-center justify-center backdrop-blur-[2px]">
-                            <div className="flex flex-col items-center gap-4">
-                                <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
-                                <p className="text-blue-400 font-medium animate-pulse text-sm">Récupération des données...</p>
-                            </div>
+                        <div className="absolute inset-0 z-10 bg-[#111822]/40 flex flex-col items-center justify-center backdrop-blur-[2px] gap-4">
+                            <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
+                            <p className="text-blue-400 font-medium animate-pulse text-sm">Récupération des données...</p>
                         </div>
                     )}
-                    <canvas ref={chartRef} className={isLoading ? "opacity-20 blur-[1px]" : "opacity-100 transition-opacity duration-500"}></canvas>
 
-                    {!isLoading && chartData.length === 0 && (
-                        <div className="text-center absolute">
-                            <p className="text-[#94a3b8] italic">Aucune donnée disponible pour cette sélection</p>
+                    <canvas ref={chartRef} className={isLoading ? "opacity-20 blur-[1px]" : "transition-opacity duration-500"}></canvas>
+
+                    {!isLoading && filteredChartData.labels.length === 0 && (
+                        <div className="absolute text-center p-10 border border-white rounded-lg bg-[#111822]">
+                            <p className="text-white text-lg">Aucune donnée disponible pour cette sélection</p>
                         </div>
                     )}
                 </div>
             ) : (
-                <div className="text-center space-y-4">
+                <div className="m-auto text-center space-y-4">
                     <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
                         <img src={favicon} alt="Logo" className="w-8 h-8" />
                     </div>

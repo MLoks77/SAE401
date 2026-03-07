@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useMemo, useRef } from "react";
 import { capitalfirstletter } from "../services/fonctions";
 
 // composants
@@ -38,9 +38,9 @@ const GraphCreation = () => {
         { type: "Taux de logements sociaux", value: "taux_logements_sociaux", isPourcent: "oui" },
         { type: "Taux de logements vacants", value: "taux_logements_vacants", isPourcent: "oui" },
         { type: "Nombre d'habitants", value: "nb_habitants", isPourcent: "non" },
-        { type: "Accroissement population", value: "accroissement", isPourcent: "non" },
-        { type: "Population moins de 20 ans", value: "pop_moins_20ans", isPourcent: "non" },
-        { type: "Population plus de 60 ans", value: "pop_plus_60ans", isPourcent: "non" },
+        { type: "Accroissement population", value: "accroissement", isPourcent: "oui" },
+        { type: "Population moins de 20 ans", value: "pop_moins_20ans", isPourcent: "oui" },
+        { type: "Population plus de 60 ans", value: "pop_plus_60ans", isPourcent: "oui" },
         { type: "Taux de chomage", value: "taux_chomage", isPourcent: "oui" },
         { type: "Taux de pauvreté", value: "taux_pauvrete", isPourcent: "oui" },
     ];
@@ -109,6 +109,19 @@ const GraphCreation = () => {
         }
         return `${baseClasses} bg-[#111822]`;
     };
+
+    // Recupération du titre du graphique
+    const selectedZoneName = useMemo(() => {
+        if (!selectedRegion || !selectedAxe) return "";
+        const zone = regionsAfficher.find(r => {
+            const key = selectedAxe === "departement" ? r.code_dept : r.id_region;
+            return String(key) === String(selectedRegion);
+        });
+        if (!zone) return "";
+        return selectedAxe === "departement"
+            ? `${zone.code_dept} - ${capitalfirstletter(zone.nom_dept)}`
+            : capitalfirstletter(zone.nom_region);
+    }, [selectedRegion, selectedAxe, regionsAfficher]);
 
     return (
         <div className="h-screen flex flex-col overflow-hidden bg-[#111822]">
@@ -288,10 +301,13 @@ const GraphCreation = () => {
                         isPourcent={Metriquess1.find(m => m.value === selectedMetriques)?.isPourcent === "oui"}
                         selectedAxe={selectedAxe}
                         selectedRegion={selectedRegion}
+                        selectedZoneName={selectedZoneName}
                         selectedY1={selectedY1}
                         selectedY2={selectedY2}
                         setDepartementvalues={setDepartementvalues}
                         setRegionvalues={setRegionvalues}
+
+
                     /> {/* le graphique va récupérer toute les données pour pouvoir afficher ce que l'on souhaite */}
                 </div>
             </section>
