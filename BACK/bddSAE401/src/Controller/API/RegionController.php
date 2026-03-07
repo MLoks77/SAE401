@@ -29,10 +29,16 @@ class RegionController extends AbstractController
         }
 
         $regions = $repository->findBy($regiondatas);
-        return $this->json($regions, 200, [], ['groups' => 'region:read']);
-        // groups : permet de spécifier quels groupes de données on veut récupérer
-        // read : permet de lire les données
+
+        $data = [];
+        foreach ($regions as $region) {
+            $data[] = [
+                'id_region' => $region->getIdRegion(),
+                'nom_region' => $region->getNomRegion(),
+            ];
+        }
+
+        return $this->json($data, 200);
     }
-    // il récupère tout, à vous de mettre ce dont vous avez besoin
 }
 

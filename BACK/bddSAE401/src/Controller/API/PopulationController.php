@@ -72,7 +72,23 @@ class PopulationController extends AbstractController
             $populationdatas['taux_pauvrete'] = $taux_pauvrete;
         }
 
-        $population = $repository->findBy($populationdatas);
-        return $this->json($population, 200, [], ['groups' => 'pop:read']);
+        $populations = $repository->findBy($populationdatas);
+
+        $data = [];
+        foreach ($populations as $pop) {
+            $data[] = [
+                'id' => $pop->getId(),
+                'annee' => $pop->getAnnee(),
+                'code_dept' => $pop->getCodeDept(),
+                'nb_habitants' => $pop->getNbHabitants(),
+                'accroissement' => $pop->getAccroissement(),
+                'pop_moins_20ans' => $pop->getPopMoins20ans(),
+                'pop_plus_60ans' => $pop->getPopPlus60ans(),
+                'taux_chomage' => $pop->getTauxChomage(),
+                'taux_pauvrete' => $pop->getTauxPauvrete(),
+            ];
+        }
+
+        return $this->json($data, 200);
     }
 }

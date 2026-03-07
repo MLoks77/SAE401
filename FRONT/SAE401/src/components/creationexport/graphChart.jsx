@@ -67,7 +67,7 @@ const GraphChart = forwardRef(({
 
                 const populationMetriques = [
                     "nb_habitants",
-                    "accroissementtotal",
+                    "accroissement",
                     "pop_moins_20ans",
                     "pop_plus_60ans",
                     "taux_chomage",

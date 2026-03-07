@@ -18,12 +18,10 @@ class Departements
 {
     #[ORM\Id]
     #[ORM\Column(length: 10)]
-    #[Groups(['dept:read', 'region:read'])]
     private ?string $code_dept = null;
 
     // nom du département
     #[ORM\Column(length: 150)]
-    #[Groups(['dept:read', 'region:read'])]
     private ?string $nom_dept = null;
 
     #[ORM\ManyToOne(inversedBy: 'departements')] // manytoone = une region peut avoir plusieurs départements
@@ -32,7 +30,6 @@ class Departements
         referencedColumnName: 'id_region',
         nullable: false
     )] // joincolumn = la region est liée au département par son nom, sa colonne et il peut être null
-    #[Groups(['dept:read'])]
     private ?Regions $id_region = null;
 
     public function getCodeDept(): ?string

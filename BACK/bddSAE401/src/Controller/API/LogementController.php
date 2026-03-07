@@ -44,6 +44,20 @@ class LogementController extends AbstractController
         }
 
         $logements = $repository->findBy($logementdatas);
-        return $this->json($logements, 200, [], ['groups' => 'logement:read']);
+
+        // convertie pour éviter les _ 
+        $data = [];
+        foreach ($logements as $logement) {
+            $data[] = [
+                'id' => $logement->getId(),
+                'annee' => $logement->getAnnee(),
+                'code_dept' => $logement->getCodeDept(),
+                'nb_logements' => $logement->getNbLogements(),
+                'taux_logements_sociaux' => $logement->getTauxLogementsSociaux(),
+                'taux_logements_vacants' => $logement->getTauxLogementsVacants(),
+            ];
+        }
+
+        return $this->json($data, 200);
     }
 }

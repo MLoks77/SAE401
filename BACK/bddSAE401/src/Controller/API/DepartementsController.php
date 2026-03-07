@@ -32,6 +32,19 @@ class DepartementsController extends AbstractController
         }
 
         $departements = $repository->findBy($departementdatas);
-        return $this->json($departements, 200, [], ['groups' => 'dept:read']);
+
+        $data = [];
+        foreach ($departements as $dept) {
+            $data[] = [
+                'code_dept' => $dept->getCodeDept(),
+                'nom_dept' => $dept->getNomDept(),
+                'id_region' => $dept->getIdRegion() ? [
+                    'id_region' => $dept->getIdRegion()->getIdRegion(),
+                    'nom_region' => $dept->getIdRegion()->getNomRegion()
+                ] : null,
+            ];
+        }
+
+        return $this->json($data, 200);
     }
 }

@@ -21,11 +21,9 @@ class Regions
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['region:read', 'dept:read'])]
     private ?int $id_region = null;
 
     #[ORM\Column(length: 150)]
-    #[Groups(['region:read', 'dept:read'])]
     private ?string $nom_region = null;
 
     #[ORM\OneToMany(targetEntity: Departements::class, mappedBy: 'id_region')]
