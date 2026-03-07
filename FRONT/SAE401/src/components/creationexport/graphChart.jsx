@@ -4,12 +4,12 @@ import favicon from "/favicon/favicon.ico";
 
 // const [activeGraphType, setActiveGraphType] = useState(graphType[0]); // utilise le premier graph : historigramme
 // activeGraphType est utilisé comme un props du parent, donc ça reçoit le type de graph des 3 boutons
-const GraphChart = forwardRef(({ activeGraphType }, ref) => {
+const GraphChart = forwardRef(({ activeGraphType, isReady }, ref) => {
     const chartRef = useRef(null);
     const chartItem = useRef(null); // const graph pour l'export en image
 
     // https://react.dev/reference/react/useImperativeHandle
-    // Expose le chartItem au parent via la ref
+    // Expose le chartItem au parent via la ref et permet l'export
     useImperativeHandle(ref, () => ({
         toBase64Image: () => {
             return chartItem.current ? chartItem.current.toBase64Image() : null;
@@ -18,7 +18,7 @@ const GraphChart = forwardRef(({ activeGraphType }, ref) => {
 
     // Initialisation 
     useEffect(() => {
-        if (chartRef.current && activeGraphType) {
+        if (chartRef.current && activeGraphType && isReady) {
             // Détruire l'instance existante avant d'en créer une nouvelle
             if (chartItem.current) {
                 chartItem.current.destroy();
@@ -69,11 +69,11 @@ const GraphChart = forwardRef(({ activeGraphType }, ref) => {
                 chartItem.current.destroy();
             }
         };
-    }, [activeGraphType]);
+    }, [activeGraphType, isReady]);
 
     return (
         <div className="col-span-2 bg-[#111822] p-8 h-full flex flex-col items-center justify-center">
-            {activeGraphType ? (
+            {isReady ? (
                 <div className="flex-1 relative min-h-0 w-full">
                     <canvas ref={chartRef} id="graph"></canvas>
                 </div>
@@ -82,7 +82,7 @@ const GraphChart = forwardRef(({ activeGraphType }, ref) => {
                     <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
                         <img src={favicon} alt="Logo" className="w-8 h-8" />
                     </div>
-                    <p className="text-[#94a3b8] font-medium italic">Veuillez choisir un type de graphique pour commencer la visualisation</p>
+                    <p className="text-[#94a3b8] font-medium italic">Veuillez remplir les 3 étapes pour commencer la visualisation </p>
                 </div>
             )}
         </div>

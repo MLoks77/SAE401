@@ -126,7 +126,7 @@ const GraphCreation = () => {
             <Navbar />
             <section className="flex-1 overflow-hidden">
                 <div className="grid grid-cols-3 h-full gap-0">
-                    {/* SIDEBAR DE CONFIGURATION */}
+                    {/* SIDEBAR DE CONFIG */}
                     <div className="bg-[#1A2432] h-full flex flex-col border-r border-[#334155] overflow-hidden">
                         <div className="flex-1 overflow-y-auto p-6 space-y-8">
                             {/* En-tête */}
@@ -137,7 +137,7 @@ const GraphCreation = () => {
                                 </p>
                             </div>
 
-                            {/* ÉTAPE 1 : TYPE DE GRAPHE */}
+                            {/* étape 1 : TYPE DE GRAPHE */}
                             <section className={getEtapeClassName(true)}>
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3">
@@ -162,7 +162,7 @@ const GraphCreation = () => {
                                 </div>
                             </section>
 
-                            {/* ÉTAPE 2 : DONNÉES */}
+                            {/* étape 2 : DONNÉES */}
                             <section className={getEtapeClassName(isEtape1Complete)}>
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3">
@@ -200,7 +200,7 @@ const GraphCreation = () => {
                                 </div>
                             </section>
 
-                            {/* ÉTAPE 3 : FILTRES */}
+                            {/* étape 3 : FILTRES */}
                             <section className={getEtapeClassName(isEtape2Complete)}>
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3">
@@ -291,7 +291,7 @@ const GraphCreation = () => {
                     </div>
 
                     {/* ZONE DE VISUALISATION */}
-                    <GraphChart ref={chartRef} activeGraphType={activeGraphType} />
+                    <GraphChart ref={chartRef} activeGraphType={activeGraphType} isReady={isEtape3Complete} />
                 </div>
             </section>
         </div>
