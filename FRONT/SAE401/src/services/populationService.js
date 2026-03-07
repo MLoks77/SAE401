@@ -9,12 +9,8 @@ const populationService = axios.create({
 });
 
 // datapopulation = fonction avec l'ensemble des données
-export const getPopulation = (dataPopulation) => {
-    return populationService.get('population', {
-        params: {
-            dataPopulation: dataPopulation
-        }
-    });
+export const getPopulation = (params = {}) => {
+    return populationService.get('population', { params });
 };
 
 export default populationService;

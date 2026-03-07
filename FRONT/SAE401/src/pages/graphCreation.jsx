@@ -38,7 +38,7 @@ const GraphCreation = () => {
         { type: "Taux de logements sociaux", value: "taux_logements_sociaux" },
         { type: "Taux de logements vacants", value: "taux_logements_vacants" },
         { type: "Nombre d'habitants", value: "nb_habitants" },
-        { type: "Accroissement population", value: "accroissement_population" },
+        { type: "Accroissement population", value: "accroissementtotal" },
         { type: "Population moins de 20 ans", value: "pop_moins_20ans" },
         { type: "Population plus de 60 ans", value: "pop_plus_60ans" },
         { type: "Taux de chomage", value: "taux_chomage" },

@@ -1,26 +1,15 @@
 import Chart from "chart.js/auto";
-import { useRef, useEffect, forwardRef, useImperativeHandle } from "react";
+import { useRef, useEffect, forwardRef, useImperativeHandle, useState, useMemo } from "react";
 import favicon from "/favicon/favicon.ico";
 
 // API
 import {
     getDepartementsChoixZone,
     getRegionsChoixZone,
-    getNbrLogement,
-    getTauxLogementSociaux,
-    getTauxLogementVacants,
-    getNbrHabitants,
-    getAccroissementPopulation,
-    getPopulationMoins20ans,
-    getPopulationPlus60ans,
-    getTauxChomage,
-    getTauxPauvrete
+    getPopulation,
+    getLogements
 } from "../../services/ServicesPages/GraphCreation";
 
-
-// ----------------- GRAPH -----------------
-
-// forward ref permet de pointer des données du parent vers le composant
 const GraphChart = forwardRef(({
     activeGraphType,
     isReady,
@@ -32,178 +21,162 @@ const GraphChart = forwardRef(({
     setDepartementvalues,
     setRegionvalues
 }, ref) => {
-    const chartRef = useRef(null);
-    const chartItem = useRef(null); // const graph pour l'export en image
+    const chartRef = useRef(null); // ref pour le canvas
+    const chartItem = useRef(null); // item pour l'export du graphique en img
+    const [chartData, setChartData] = useState([]); // Données de l'api
 
-    // https://react.dev/reference/react/useImperativeHandle
-    // Expose le chartItem au parent via la ref et permet l'export
-    useImperativeHandle(ref, () => ({
-        toBase64Image: () => {
-            return chartItem.current ? chartItem.current.toBase64Image() : null;
-        }
-    }));
-
-    //selected metriques
-    // https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Statements/switch
-    // switch case, permet de gérer les conditions sans a a voir à spam des if else
-    let dataMetrique = [];
-    switch (selectedMetriques.value) {
-        case "nb_logements":
-            dataMetrique = getNbrLogement(selectedRegion.value);
-            break;
-        case "taux_logements_sociaux":
-            dataMetrique = getTauxLogementSociaux(selectedRegion.value);
-            break;
-        case "taux_logements_vacants":
-            dataMetrique = getTauxLogementVacants(selectedRegion.value);
-            break;
-        case "nb_habitants":
-            dataMetrique = getNbrHabitants(selectedRegion.value);
-            break;
-        case "accroissement_population":
-            dataMetrique = getAccroissementPopulation(selectedRegion.value);
-            break;
-        case "pop_moins_20ans":
-            dataMetrique = getPopulationMoins20ans(selectedRegion.value);
-            break;
-        case "pop_plus_60ans":
-            dataMetrique = getPopulationPlus60ans(selectedRegion.value);
-            break;
-        case "taux_chomage":
-            dataMetrique = getTauxChomage(selectedRegion.value);
-            break;
-        case "taux_pauvrete":
-            dataMetrique = getTauxPauvrete(selectedRegion.value);
-            break;
-        default:
-            break;
-    }
-
-    //selected Axe
-    let dataAxe = [];
-    switch (selectedAxe.value) {
-        case "departement":
-            dataAxe = getDepartement(selectedRegion.value);
-            break;
-        case "region":
-            dataAxe = getRegion(selectedRegion.value);
-            break;
-        default:
-            break;
-    }
-
-    //selected Region / departement
-    let dataRegion = [];
-    switch (selectedRegion.value) {
-        case "departement":
-            dataRegion = getDepartement(selectedRegion.value);
-            break;
-        case "region":
-            dataRegion = getRegion(selectedRegion.value);
-            break;
-        default:
-            break;
-    }
-
-    // choix des années + gestion des données dedans :
-    // le choix des années va impacter sur la taille du graph [ 2021, 2022, 2023 ]
-    const début = Math.min(Number(selectedY1.value), Number(selectedY2.value)); // on prend la plus petite année
-    const fin = Math.max(Number(selectedY1.value), Number(selectedY2.value)); // on prend la plus grande année
-
-    const annees = []; // on stock les années dans un tableau
-
-    for (let year = début; year <= fin; year++) { // on boucle du début à la fin pour remplir le tableau
-        annees.push(year);
-    }
-
-    // dataMetrique = données API, A MODIFIER
-    const dataAffichee = annees.map(annee => {
-        // On cherche la valeur correspondant à l'année dans tes données réelles
-        const record = dataMetrique.find(d => Number(d.annee) === annee);
-        return record ? record.valeur : 0; // Met 0 si l'année n'existe pas
-    });
-
-    //  fetch api pour departement et regions
+    // Fetch initial pour les listes de zones
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const [deptsRes, regionsRes] = await Promise.all([
-                    getDepartementsChoixZone(), // ramène : nom_dept
-                    getRegionsChoixZone() // ramène : nom_region
+                    getDepartementsChoixZone(), // choix departement
+                    getRegionsChoixZone() // choix region
                 ]);
-                setDepartementvalues(deptsRes); // deptsRes = []
-                setRegionvalues(regionsRes); // regionsRes = []
+                setDepartementvalues(deptsRes); // stockage des departements
+                setRegionvalues(regionsRes); // stockage des regions
             } catch (error) {
-                console.error("Erreur lors du fetch", error);
+                console.error("Erreur lors du fetch des zones", error);
             }
         };
         fetchData();
-    }, []);
+    }, [setDepartementvalues, setRegionvalues]);
 
-    // Faire une requête qui prend en compte : l'année, le departement ou la region et la metrique a l'api, ce qui permettra d'afficher ce que l'utilisateur veut
 
-    // Initialisation 
+    // useeffect qui récupère les données de l'api : avec différents params
     useEffect(() => {
-        if (chartRef.current && activeGraphType && isReady) {
-            // Détruire l'instance existante avant d'en créer une nouvelle
+        const fetchMetriqueData = async () => {
+            if (!isReady || !selectedMetriques || !selectedRegion) return;
+
+            try {
+                const typeAxe = selectedAxe;
+                const valeurZone = selectedRegion;
+
+                const params = {};
+                if (typeAxe === "departement") {
+                    params.code_dept = valeurZone;
+                } else if (typeAxe === "region") {
+                    params.id_region = valeurZone;
+                }
+
+                const logementMetriques = [
+                    "nb_logements",
+                    "taux_logements_sociaux",
+                    "taux_logements_vacants"
+                ];
+
+                const populationMetriques = [
+                    "nb_habitants",
+                    "accroissementtotal",
+                    "pop_moins_20ans",
+                    "pop_plus_60ans",
+                    "taux_chomage",
+                    "taux_pauvrete"
+                ];
+
+                let response;
+
+                if (logementMetriques.includes(selectedMetriques)) {
+                    response = await getLogements(params);
+                } else if (populationMetriques.includes(selectedMetriques)) {
+                    response = await getPopulation(params);
+                }
+
+                if (response && response.data) {
+                    setChartData(response.data);
+                } else if (response) {
+                    setChartData(response);
+                }
+
+            } catch (error) {
+                console.error("Erreur lors du chargement des données", error);
+                setChartData([]);
+            }
+        };
+
+        fetchMetriqueData();
+
+    }, [selectedMetriques, selectedAxe, selectedRegion, selectedY1, selectedY2, isReady]);
+
+    // calcul du choix de l'année
+    const annees = useMemo(() => {
+        const début = Math.min(Number(selectedY1), Number(selectedY2));
+        const fin = Math.max(Number(selectedY1), Number(selectedY2));
+        const results = [];
+        for (let year = début; year <= fin; year++) {
+            results.push(year);
+        }
+        return results;
+    }, [selectedY1, selectedY2]);
+
+    // données affichées suivant l'annee
+    const dataAffichee = useMemo(() => {
+        return annees.map(annee => {
+            const record = chartData.find(d => Number(d.annee) === annee);
+            return record ? record[selectedMetriques] : 0;
+        });
+    }, [annees, chartData, selectedMetriques]);
+
+    // export du graphique
+    useImperativeHandle(ref, () => ({
+        toBase64Image: () => chartItem.current ? chartItem.current.toBase64Image() : null
+    }));
+
+    useEffect(() => {
+        if (chartRef.current && activeGraphType && isReady && chartData.length > 0) { // on charge que si on a les données
             if (chartItem.current) {
                 chartItem.current.destroy();
             }
 
-            const ctx = chartRef.current.getContext("2d");
+            const ctx = chartRef.current.getContext("2d"); // on récupère le contexte du canvas, ici 2D
             chartItem.current = new Chart(ctx, {
-                // type de graph
                 type: activeGraphType?.type === "Histogramme" ? "bar" : activeGraphType?.type === "Camembert" ? "pie" : "line",
-                // données = fictive pour le moment à changer après
                 data: {
                     labels: annees,
                     datasets: [{
-                        label: "Données de test",
-                        data: [1, 2, 3],
+                        label: selectedMetriques.label || "Valeur",
+                        data: dataAffichee,
                         backgroundColor: activeGraphType?.type === "Camembert"
                             ? ["#3b82f6", "#ef4444", "#10b981", "#f59e0b", "#6366f1", "#8b5cf6"]
-                            : "#3b82f6",
+                            : "rgba(59, 130, 246, 0.5)",
                         borderColor: "#3b82f6",
-                        borderWidth: 1
+                        borderWidth: 2,
+                        fill: true
                     }]
                 },
                 options: {
-                    responsive: true, // rend le graph responsive
-                    maintainAspectRatio: false, // permet de définir la taille du graph
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
-                        legend: {
-                            labels: { color: "white" } // couleur des légendes
-                        }
+                        legend: { labels: { color: "white" } }
                     },
-                    scales: activeGraphType?.type !== "Camembert" ? { // si c'est pas camembert
+                    scales: activeGraphType?.type !== "Camembert" ? {
                         y: {
-                            beginAtZero: false, // commence à 0
+                            beginAtZero: true,
                             grid: { color: "rgba(255, 255, 255, 0.1)" },
+                            ticks: { color: "white" }
+                        },
+                        x: {
+                            ticks: { color: "white" }
                         }
                     } : {}
                 }
             });
         }
-        // Nettoyage quand on change de graph
-        return () => {
-            if (chartItem.current) {
-                chartItem.current.destroy();
-            }
-        };
-    }, [activeGraphType, isReady]);
+    }, [activeGraphType, isReady, chartData, dataAffichee, annees, selectedMetriques]);
 
     return (
         <div className="col-span-2 bg-[#111822] p-8 h-full flex flex-col items-center justify-center">
             {isReady ? (
                 <div className="flex-1 relative min-h-0 w-full">
-                    <canvas ref={chartRef} id="graph"></canvas>
+                    <canvas ref={chartRef}></canvas>
                 </div>
             ) : (
                 <div className="text-center space-y-4">
                     <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
                         <img src={favicon} alt="Logo" className="w-8 h-8" />
                     </div>
-                    <p className="text-[#94a3b8] font-medium italic">Veuillez remplir les 3 étapes pour commencer la visualisation </p>
+                    <p className="text-[#94a3b8] font-medium italic">Veuillez remplir les 3 étapes pour commencer la visualisation</p>
                 </div>
             )}
         </div>

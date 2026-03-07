@@ -8,12 +8,8 @@ const logementsService = axios.create({
     }
 });
 
-export const getLogements = (datalogements) => {
-    return logementsService.get('logements', {
-        params: {
-            data: datalogements
-        }
-    });
+export const getLogements = (params = {}) => {
+    return logementsService.get('logements', { params });
 };
 
 export default logementsService;

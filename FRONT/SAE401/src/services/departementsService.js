@@ -8,12 +8,8 @@ const departementsService = axios.create({
     }
 });
 
-export const getDepartements = (dataDepartements) => {
-    return departementsService.get('departements', {
-        params: {
-            dataDepartements: dataDepartements
-        }
-    });
+export const getDepartements = (params) => {
+    return departementsService.get('departements', { params });
 };
 
 export default departementsService;
