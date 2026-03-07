@@ -11,7 +11,7 @@ const Navbar = () => {
     const active = "text-white p-2 font-semibold hoverbar ring-gray-200 ring-1 bg-gray-800"
 
     return (
-        <nav className="bg-[#0A1420] flex items-center justify-center p-4">
+        <nav className="bg-[#0A1420] flex items-center justify-end p-4">
             <div className="absolute left-4 hidden md:block">
                 <img src={favicon} alt="Logo" className="w-8 h-8" />
             </div>

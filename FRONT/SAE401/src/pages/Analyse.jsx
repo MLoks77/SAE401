@@ -2,7 +2,7 @@ import Navbar from "../components/navbar";
 
 const Analyse = () => {
     return (
-        <div>
+        <div className="h-screen flex flex-col overflow-hidden bg-[#111822]">
             <Navbar></Navbar>
         </div>
     );
