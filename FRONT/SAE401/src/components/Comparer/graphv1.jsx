@@ -3,8 +3,8 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const Graphv1 = () => {
     return (
-        <div className="w-full min-h-screen px-4 pb-8">
-            <div className="bg-[#1A2432] rounded-xl p-6 shadow-lg">
+        <div className="w-full h-full">
+            <div className="bg-[#1A2432] rounded-xl p-6 shadow-lg h-full w-full">
                 <span className="text-white font-medium">graphv1</span>
             </div>
         </div>

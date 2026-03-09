@@ -9,7 +9,7 @@ const GridCompar = () => {
         <div className="h-screen flex flex-col overflow-hidden bg-[#111822]">
             <Navbar></Navbar>
             <BtnCriteres></BtnCriteres>
-            <div className="flex flex-row p-4 gap-4">
+            <div className="flex-1 flex flex-row p-4 pb-8 gap-4">
                 <Graphv1 />
                 <Graphv2 />
             </div>
