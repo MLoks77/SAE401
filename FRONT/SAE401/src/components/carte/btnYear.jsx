@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from 'react-router-dom'; // comme pour navlink, sa permet de détecter la page actuel
-import SearchBar from "../components/Searchbar";
+import SearchBar from "../Searchbar";
 
 // Par Maxime Derènes
 

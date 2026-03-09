@@ -1,10 +1,18 @@
 import Navbar from "../components/navbar";
-import BtnYear from "../components/btnYear";
+import BtnCriteres from "../components/Comparer/btnCriteres";
+
+import Graphv1 from "../components/Comparer/graphv1";
+import Graphv2 from "../components/Comparer/graphv2";
+
 const GridCompar = () => {
     return (
         <div className="h-screen flex flex-col overflow-hidden bg-[#111822]">
             <Navbar></Navbar>
-            <BtnYear></BtnYear>
+            <BtnCriteres></BtnCriteres>
+            <div className="flex flex-row p-4 gap-4">
+                <Graphv1 />
+                <Graphv2 />
+            </div>
         </div>
     );
 };
