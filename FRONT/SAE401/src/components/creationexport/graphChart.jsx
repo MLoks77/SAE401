@@ -152,7 +152,7 @@ const GraphChart = forwardRef(({
                         label: metriqueLabel,
                         data: filteredChartData.values,
                         backgroundColor: (() => {
-                            const palette = ["#e76a27ff", "#323aa4ff", "#C51F1F"];
+                            const palette = ["#8ecae6", "#219ebc", "#023047"];
 
                             if (activeGraphType?.type === "Camembert" || activeGraphType?.type === "Histogramme") {
                                 return filteredChartData.labels.map((_, i) => palette[i % palette.length]);
@@ -185,7 +185,9 @@ const GraphChart = forwardRef(({
                         },
                         legend: {
                             labels: {
-                                color: "white",
+                                color: 'white',
+                                // Si c'est un histogramme, on cache la box de couleur
+                                boxWidth: activeGraphType?.type === "Histogramme" ? 0 : 40,
                             }
                         },
                         tooltip: {
@@ -214,6 +216,8 @@ const GraphChart = forwardRef(({
                         // bibliothèque datalabels
                         datalabels: {
                             color: '#ecececff', // couleur des datalabels de la biblio datalabels
+                            textShadowColor: 'black',
+                            textShadowBlur: 5,
                             font: {
                                 size: 16,
                                 weight: 'bold'

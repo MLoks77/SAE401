@@ -281,7 +281,7 @@ const GraphCreation = () => {
                             </section>
 
                             {/* ACTIONS EN BAS */}
-                            <div className="flex flex-col gap-2 pt-4 border-t border-[#334155]">
+                            <div className="flex justify-center gap-2 pt-4 border-t border-[#334155]">
                                 <div className={isEtape4Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"}>
                                     <BtnExport chartRef={chartRef} />
                                 </div>

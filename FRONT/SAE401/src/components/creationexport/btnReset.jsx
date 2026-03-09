@@ -1,8 +1,8 @@
 // bouton reset
 const BtnReset = ({ reset }) => {
     return (
-        <div className="p-4 bg-[#1A2432]">
-            <button onClick={reset} className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg transition-colors cursor-pointer active:scale-[0.98]">
+        <div className="p-2">
+            <button onClick={reset} className="p-4 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-lg transition-colors min-w-60 cursor-pointer active:scale-[0.98]">
                 Réinitialiser
             </button>
         </div>
