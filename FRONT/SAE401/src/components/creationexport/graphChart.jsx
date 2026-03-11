@@ -35,7 +35,6 @@ const GraphChart = forwardRef(({
     const [chartData, setChartData] = useState([]); // Données de l'api
     const [isLoading, setIsLoading] = useState(false); // État de chargement de l'api
 
-    // Fetch initial pour les listes de zones
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -255,7 +254,7 @@ const GraphChart = forwardRef(({
                 <div className="flex-1 relative w-full flex items-center justify-center">
                     {isLoading && (
                         <div className="absolute inset-0 z-10 bg-[#111822]/40 flex flex-col items-center justify-center backdrop-blur-[2px] gap-4">
-                            <div className="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin"></div>
+                            <div className="w-12 h-12 border-4 border-[#111822]/20 border-t-[#111822] rounded-full animate-spin"></div>
                             <p className="text-blue-400 font-medium animate-pulse text-sm">Récupération des données...</p>
                         </div>
                     )}

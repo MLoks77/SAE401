@@ -1,5 +1,12 @@
 import axios from 'axios';
 
+// "id": 819,
+// "annee": 2023,
+// "code_dept": "76",
+// "nb_logements": 653680,
+// "taux_logements_sociaux": 26,
+// "taux_logements_vacants": 8
+
 const logementsService = axios.create({
     baseURL: 'https://localhost:8000/api',
     headers: {

@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+// "id_region": 84,
+// "nom_region": "AUVERGNE-RHÔNE-ALPES"
+
 const regionsService = axios.create({
     baseURL: 'https://localhost:8000/api',
     headers: {

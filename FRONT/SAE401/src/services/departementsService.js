@@ -1,5 +1,12 @@
 import axios from 'axios';
 
+// "code_dept": "01",
+// "nom_dept": "Ain",
+// "id_region": {
+//     "id_region": 84,
+//     "nom_region": "AUVERGNE-RHÔNE-ALPES"
+// }
+
 const departementsService = axios.create({
     baseURL: 'https://localhost:8000/api',
     headers: {

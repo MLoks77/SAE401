@@ -1,5 +1,15 @@
 import axios from 'axios';
 
+// "id": 819,
+// "annee": 2023,
+// "code_dept": "76",
+// "nb_habitants": 1254334,
+// "accroissement": 0,
+// "pop_moins_20ans": 24,
+// "pop_plus_60ans": 27,
+// "taux_chomage": 7.5,
+// "taux_pauvrete": 14.6
+
 const populationService = axios.create({
     baseURL: 'https://localhost:8000/api',
     headers: {
