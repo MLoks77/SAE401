@@ -1,10 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 // composants
-
 import Cartemodal from "../components/carte/Cartemodal";
-
 import Navbar from "../components/navbar";
-import BtnYear from "../components/carte/btnYear";
 import "../css/carte.css";
 
 const Carte = () => {
@@ -29,7 +26,6 @@ const Carte = () => {
     return (
         <div className="wrapper bg-[#1A1A20]">
             < Navbar />
-            <BtnYear />
             <div className="carte"> {/* lien vers la carte : https://www.kortic.com/carte-de-france-vectorielle-interactive-et-accessible.html#javascript */}
                 <canvas id="canvas-carte-france" width="800" height="800"></canvas>
                 <svg
