@@ -1,6 +1,7 @@
 // imports
 import { useState, useEffect } from "react";
 import { getAllAreas } from "../../services/ServicesPages/ComparaisonService";
+import { capitalfirstletter } from "../../services/fonctionsglobales";
 // services
 import { Metriques } from "../../services/fonctionsglobales";
 import { getEtapeClassName } from "../../services/fonctionsglobales";
@@ -32,8 +33,8 @@ const BtnCriteres = () => {
 
     //  GESTION DES ÉTAPES 
     const isEtape1Complete = selectedMetrique !== ""; // selection metrique
-    const areValues1Selected = selectedValue1 !== ""; // selection des valeurs 1
-    const areValues2Selected = selectedValue2 !== ""; // selection des valeurs 2
+    const areValues1Selected = selectedValue1 !== ""; // selection des valeurs 1, pour l'affichage des graphiques
+    const areValues2Selected = selectedValue2 !== ""; // selection des valeurs 2, pour l'affichage des graphiques
 
     return (
         <section className="bg-[#1A2432] rounded-xl p-6 m-4">
@@ -80,7 +81,7 @@ const BtnCriteres = () => {
                         <optgroup label="Régions">
                             {areas.regions.map((reg) => (
                                 <option key={reg.id_region} value={reg.nom_region}>
-                                    {reg.nom_region}
+                                    {capitalfirstletter(reg.nom_region)}
                                 </option>
                             ))}
                         </optgroup>
@@ -105,7 +106,7 @@ const BtnCriteres = () => {
                         <optgroup label="Régions">
                             {areas.regions.map((reg) => (
                                 <option key={reg.id_region} value={reg.nom_region}>
-                                    {reg.nom_region}
+                                    {capitalfirstletter(reg.nom_region)}
                                 </option>
                             ))}
                         </optgroup>
