@@ -39,7 +39,7 @@ const BtnCriteres = () => {
     return (
         <section className="bg-[#1A2432] rounded-xl p-6 m-4">
 
-            <div className="flex flex-col mb-10">
+            <div className="flex flex-col mb-2">
                 {/* titre */}
                 <h1 className="text-2xl font-bold text-white mb-3">Comparer : <span className="text-sm ml-1 text-gray-400">Choisissez puis comparez les données de 2 zones de votre choix</span></h1>
             </div>
