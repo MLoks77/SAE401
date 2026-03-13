@@ -7,6 +7,8 @@ import axios from 'axios';
 //     "nom_region": "AUVERGNE-RHÔNE-ALPES"
 // }
 
+
+
 const departementsService = axios.create({
     baseURL: 'https://localhost:8000/api',
     headers: {

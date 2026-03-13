@@ -10,6 +10,15 @@ import axios from 'axios';
 // "taux_chomage": 7.5,
 // "taux_pauvrete": 14.6
 
+
+// les données présentes ici sont :
+// nb_habitants
+// accroissement
+// pop_moins_20ans
+// pop_plus_60ans
+// taux_chomage
+// taux_pauvrete
+
 const populationService = axios.create({
     baseURL: 'https://localhost:8000/api',
     headers: {
