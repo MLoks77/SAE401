@@ -2,7 +2,6 @@ import { useState } from "react";
 // composants
 import Cartemodal from "../components/carte/Cartemodal";
 import Navbar from "../components/navbar";
-import BtnYear from "../components/carte/btnYear";
 import Cartesvg from "../components/carte/cartesvg";
 import "../css/carte.css";
 
@@ -29,7 +28,6 @@ const Carte = () => {
     return (
         <div className="wrapper bg-[#1A1A20]">
             <Navbar />
-            <BtnYear activeYear={activeYear} setActiveYear={setActiveYear} /> {/* on passe l'année en cours en props */}
             <Cartesvg ClickDpt={ClickDpt} />
             <div>
                 <Cartemodal
