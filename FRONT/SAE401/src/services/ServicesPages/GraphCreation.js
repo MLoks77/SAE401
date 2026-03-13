@@ -41,3 +41,4 @@ export const getRegionsChoixZone = async (id_region, nom_region) => {
 
     return requete.data.sort((a, b) => a.nom_region.localeCompare(b.nom_region));
 };
+

@@ -6,8 +6,6 @@ use App\Entity\Regions;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/* fait par [ mettez votre nom et vous le prenez ] */
-
 
 class RegionsRepository extends ServiceEntityRepository
 {

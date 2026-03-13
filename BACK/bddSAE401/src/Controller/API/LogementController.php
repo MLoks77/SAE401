@@ -22,28 +22,34 @@ class LogementController extends AbstractController
         $nb_logements = $request->query->get('nb_logements');
         $taux_logements_sociaux = $request->query->get('taux_logements_sociaux');
         $taux_logements_vacants = $request->query->get('taux_logements_vacants');
+        $id_region = $request->query->get('id_region');
 
-        $logementdatas = [];
-        if ($id_logement) {
-            $logementdatas['id'] = $id_logement;
-        }
-        if ($annee) {
-            $logementdatas['annee'] = $annee;
-        }
-        if ($code_dept) {
-            $logementdatas['code_dept'] = $code_dept;
-        }
-        if ($nb_logements) {
-            $logementdatas['nb_logements'] = $nb_logements;
-        }
-        if ($taux_logements_sociaux) {
-            $logementdatas['taux_logements_sociaux'] = $taux_logements_sociaux;
-        }
-        if ($taux_logements_vacants) {
-            $logementdatas['taux_logements_vacants'] = $taux_logements_vacants;
-        }
+        $logements = [];
+        if ($id_region) {
+            return $this->json($repository->findByRegion((int) $id_region), 200);
+        } else {
+            $logementdatas = [];
+            if ($id_logement) {
+                $logementdatas['id'] = $id_logement;
+            }
+            if ($annee) {
+                $logementdatas['annee'] = $annee;
+            }
+            if ($code_dept) {
+                $logementdatas['code_dept'] = $code_dept;
+            }
+            if ($nb_logements) {
+                $logementdatas['nb_logements'] = $nb_logements;
+            }
+            if ($taux_logements_sociaux) {
+                $logementdatas['taux_logements_sociaux'] = $taux_logements_sociaux;
+            }
+            if ($taux_logements_vacants) {
+                $logementdatas['taux_logements_vacants'] = $taux_logements_vacants;
+            }
 
-        $logements = $repository->findBy($logementdatas);
+            $logements = $repository->findBy($logementdatas);
+        }
 
         // convertie pour éviter les _ 
         $data = [];

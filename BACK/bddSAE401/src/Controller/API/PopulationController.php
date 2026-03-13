@@ -31,6 +31,12 @@ class PopulationController extends AbstractController
         $taux_chomage = $request->query->get('taux_chomage');
         $taux_pauvrete = $request->query->get('taux_pauvrete');
 
+        $id_region = $request->query->get('id_region');
+
+        if ($id_region) {
+            return $this->json($repository->findByRegion((int) $id_region), 200);
+        }
+
         $populationdatas = [];
         if ($id) {
             $populationdatas['id'] = $id;

@@ -1,5 +1,7 @@
 import { useState, useMemo, useRef } from "react";
-import { capitalfirstletter } from "../services/fonctions";
+// fonctions
+import { getEtapeClassName } from "../services/fonctionsglobales";
+import { capitalfirstletter } from "../services/fonctionsglobales";
 
 // composants
 import Navbar from "../components/navbar";
@@ -7,6 +9,8 @@ import GraphChart from "../components/creationexport/graphChart";
 import BtnReset from "../components/creationexport/btnReset";
 import BtnExport from "../components/creationexport/btnExport";
 
+// services
+import { Metriques } from "../services/fonctionsglobales";
 
 
 // par maxime derènes
@@ -33,17 +37,7 @@ const GraphCreation = () => {
     const [selectedAxe, setSelectedAxe] = useState(""); // axe de comparaison : par région ou par département 
 
     // choix metrique
-    const Metriquess1 = [
-        { type: "Nombre de logements", value: "nb_logements", isPourcent: "non" },
-        { type: "Taux de logements sociaux", value: "taux_logements_sociaux", isPourcent: "oui" },
-        { type: "Taux de logements vacants", value: "taux_logements_vacants", isPourcent: "oui" },
-        { type: "Nombre d'habitants", value: "nb_habitants", isPourcent: "non" },
-        { type: "Accroissement population", value: "accroissement", isPourcent: "oui" },
-        { type: "Population moins de 20 ans", value: "pop_moins_20ans", isPourcent: "oui" },
-        { type: "Population plus de 60 ans", value: "pop_plus_60ans", isPourcent: "oui" },
-        { type: "Taux de chomage", value: "taux_chomage", isPourcent: "oui" },
-        { type: "Taux de pauvreté", value: "taux_pauvrete", isPourcent: "oui" },
-    ];
+    const Metriquess1 = Metriques;
 
     const axecomparaison = [
         { type: "Par département", value: "departement" },
@@ -65,8 +59,6 @@ const GraphCreation = () => {
 
     // gère le changement de région / depart choisi
     const handleRegionChange = (e) => setSelectedRegion(e.target.value);
-
-
 
     // calcul de la valeur 2e année de comparaison
     // si V1 = 2022, V2 ne peut pas être à 2021
@@ -101,14 +93,6 @@ const GraphCreation = () => {
     const isEtape2Complete = isEtape1Complete && selectedMetriques !== "" && selectedAxe !== ""; // étape 2 = axe comparaison
     const isEtape3Complete = isEtape2Complete && selectedY1 !== "" && selectedY2 !== "" && selectedRegion !== ""; // étape 3 = choix des filtres
     const isEtape4Complete = isEtape3Complete; // étape 4 = export
-
-    const getEtapeClassName = (isUnlocked) => {
-        const baseClasses = "p-4 rounded-lg transition-all duration-500";
-        if (!isUnlocked) {
-            return `${baseClasses} bg-[#111822]/80 opacity-30 pointer-events-none grayscale`;
-        }
-        return `${baseClasses} bg-[#111822]`;
-    };
 
     // Recupération du titre du graphique
     const selectedZoneName = useMemo(() => {

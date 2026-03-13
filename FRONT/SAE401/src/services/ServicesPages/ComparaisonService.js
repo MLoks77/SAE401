@@ -1,7 +1,7 @@
 import { getDepartements } from "../departementsService";
 import { getRegions } from "../regionsService";
-export { getLogements } from "../logementsService";
-export { getPopulation } from "../populationService";
+import { getLogements } from "../logementsService";
+import { getPopulation } from "../populationService";
 
 export const getAllAreas = async () => {
     // réponse de axios
@@ -17,3 +17,4 @@ export const getAllAreas = async () => {
         regions: regionsTriees
     };
 };
+
