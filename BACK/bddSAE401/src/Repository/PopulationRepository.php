@@ -8,13 +8,12 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class PopulationRepository extends ServiceEntityRepository
 {
-    // fonction pour trouver les données de la base de données par région et trier en sous forme de requêtes query
     public function findByRegion(int $id_region): array
     {
         return $this->createQueryBuilder('p')
             ->select('p.annee')
             ->addSelect('SUM(p.nb_habitants) as nb_habitants')
-            ->addSelect('(AVG(p.solde_naturel) + AVG(p.solde_migratoire)) as accroissement')
+            ->addSelect('(SUM(p.solde_naturel) + SUM(p.solde_migratoire)) as accroissement')
             ->addSelect('AVG(p.pop_moins_20ans) as pop_moins_20ans')
             ->addSelect('AVG(p.pop_plus_60ans) as pop_plus_60ans')
             ->addSelect('AVG(p.taux_chomage) as taux_chomage')
@@ -26,5 +25,10 @@ class PopulationRepository extends ServiceEntityRepository
             ->orderBy('p.annee', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Population::class);
     }
 }

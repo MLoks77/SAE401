@@ -24,7 +24,8 @@ class PopulationController extends AbstractController
         $solde_naturel = $request->query->get('solde_naturel');
         $solde_migratoire = $request->query->get('solde_migratoire');
 
-        $accroissementtotal = $solde_naturel + $solde_migratoire;
+        // On convertit en float pour éviter les erreurs si null, le calcul sert pour le filtre plus bas
+        $accroissementtotal = ($solde_naturel !== null ? (float) $solde_naturel : 0) + ($solde_migratoire !== null ? (float) $solde_migratoire : 0);
 
         $pop_moins_20ans = $request->query->get('pop_moins_20ans');
         $pop_plus_60ans = $request->query->get('pop_plus_60ans');
@@ -61,9 +62,6 @@ class PopulationController extends AbstractController
         }
         if ($solde_migratoire) {
             $populationdatas['solde_migratoire'] = $solde_migratoire;
-        }
-        if ($accroissementtotal) {
-            $populationdatas['accroissementtotal'] = $accroissementtotal;
         }
         if ($pop_moins_20ans) {
             $populationdatas['pop_moins_20ans'] = $pop_moins_20ans;

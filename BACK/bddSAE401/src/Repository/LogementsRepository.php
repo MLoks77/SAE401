@@ -9,7 +9,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class LogementsRepository extends ServiceEntityRepository
 {
-    // fonction pour trouver les données de la base de données par région et trier en sous forme de requêtes query
     public function findByRegion(int $id_region): array
     {
         return $this->createQueryBuilder('l')
@@ -25,4 +24,10 @@ class LogementsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Logements::class);
+    }
+
 }

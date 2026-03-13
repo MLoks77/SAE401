@@ -37,7 +37,7 @@ const GraphCreation = () => {
     const [selectedAxe, setSelectedAxe] = useState(""); // axe de comparaison : par région ou par département 
 
     // choix metrique
-    const Metriquess1 = Metriques;
+    const Metriques1 = Metriques;
 
     const axecomparaison = [
         { type: "Par département", value: "departement" },
@@ -164,7 +164,7 @@ const GraphCreation = () => {
                                                 className="w-full p-2.5 bg-[#111822] text-white rounded-lg border border-[#334155] outline-none cursor-pointer"
                                             >
                                                 <option value="" hidden>Choisir une métrique</option>
-                                                {Metriquess1.map((m) => (
+                                                {Metriques1.map((m) => (
                                                     <option key={m.type} value={m.value}>{m.type}</option>
                                                 ))}
                                             </select>
@@ -281,8 +281,8 @@ const GraphCreation = () => {
                         activeGraphType={activeGraphType}
                         isReady={isEtape3Complete}
                         selectedMetriques={selectedMetriques}
-                        metriqueLabel={Metriquess1.find(m => m.value === selectedMetriques)?.type || "Valeur"}
-                        isPourcent={Metriquess1.find(m => m.value === selectedMetriques)?.isPourcent === "oui"}
+                        metriqueLabel={Metriques1.find(m => m.value === selectedMetriques)?.type || "Valeur"}
+                        isPourcent={Metriques1.find(m => m.value === selectedMetriques)?.isPourcent === "oui"}
                         selectedAxe={selectedAxe}
                         selectedRegion={selectedRegion}
                         selectedZoneName={selectedZoneName}
