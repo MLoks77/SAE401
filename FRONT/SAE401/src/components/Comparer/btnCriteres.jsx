@@ -9,13 +9,14 @@ import { getEtapeClassName } from "../../services/fonctionsglobales";
 
 const BtnCriteres = () => {
 
-    const [allAreas, setAllAreas] = useState([]);
+    // State pour stocker les deux listes
+    const [areas, setAreas] = useState({ departements: [], regions: [] });
 
     // fetch pour utiliser les données de l'api dans ComparaisonService
     useEffect(() => {
         const fetchAreas = async () => {
-            const areas = await getAllAreas();
-            setAllAreas(areas);
+            const data = await getAllAreas();
+            setAreas(data);
         };
         fetchAreas();
     }, []);
@@ -37,7 +38,7 @@ const BtnCriteres = () => {
     return (
         <section className="bg-[#1A2432] rounded-xl p-6 m-4">
 
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6 w-full">
+            <div className="flex flex-col mb-10">
                 {/* titre */}
                 <h1 className="text-2xl font-bold text-white mb-3">Comparer : <span className="text-sm ml-1 text-gray-400">Choisissez puis comparez les données de 2 zones de votre choix</span></h1>
             </div>
@@ -67,11 +68,22 @@ const BtnCriteres = () => {
                     <label className="text-slate-400 text-md font-medium tracking-wide ml-1">Valeur n°1</label>
                     <select value={selectedValue1} onChange={(e) => setSelectedValue1(e.target.value)} className="w-full bg-[#111822] text-slate-200 px-4 py-4 my-2 rounded-lg focus:ring-1 focus:ring-white transition-all cursor-pointer shadow-sm">
                         <option value="">Sélectionner une zone</option>
-                        {allAreas.map((area) => (
-                            <option key={area.id} value={area.nom_dept}>
-                                {area.nom_dept}
-                            </option>
-                        ))}
+
+                        <optgroup label="Départements">
+                            {areas.departements.map((dept) => (
+                                <option key={dept.code_dept} value={dept.nom_dept}>
+                                    {dept.code_dept} - {dept.nom_dept}
+                                </option>
+                            ))}
+                        </optgroup>
+
+                        <optgroup label="Régions">
+                            {areas.regions.map((reg) => (
+                                <option key={reg.id_region} value={reg.nom_region}>
+                                    {reg.nom_region}
+                                </option>
+                            ))}
+                        </optgroup>
                     </select>
                 </section>
 
@@ -81,11 +93,22 @@ const BtnCriteres = () => {
                     <label className="text-slate-400 text-md font-medium tracking-wide ml-1">Valeur n°2</label>
                     <select value={selectedValue2} onChange={(e) => setSelectedValue2(e.target.value)} className="w-full bg-[#111822] text-slate-200 px-4 py-4 my-2 rounded-lg focus:ring-1 focus:ring-white transition-all cursor-pointer shadow-sm">
                         <option value="">Sélectionner une zone</option>
-                        {allAreas.map((area) => (
-                            <option key={area.id} value={area.nom_dept}>
-                                {area.nom_dept}
-                            </option>
-                        ))}
+
+                        <optgroup label="Départements">
+                            {areas.departements.map((dept) => (
+                                <option key={dept.code_dept} value={dept.nom_dept}>
+                                    {dept.code_dept} - {dept.nom_dept}
+                                </option>
+                            ))}
+                        </optgroup>
+
+                        <optgroup label="Régions">
+                            {areas.regions.map((reg) => (
+                                <option key={reg.id_region} value={reg.nom_region}>
+                                    {reg.nom_region}
+                                </option>
+                            ))}
+                        </optgroup>
                     </select>
                 </section>
             </div>
