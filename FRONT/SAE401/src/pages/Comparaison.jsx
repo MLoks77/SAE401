@@ -50,11 +50,11 @@ const GridCompar = () => {
             {selectedValue1 === "" && selectedValue2 === "" ? (
                 notloaded()
             ) : (
-                <div className="flex-1 flex flex-row p-4 pb-8 gap-4">
-                    <div className="flex-1">
+                <div className="flex-1 flex flex-row mx-4 mb-4 gap-4 overflow-hidden">
+                    <div className="flex-1 bg-[#1A2432] rounded-xl p-6 shadow-lg">
                         {loadCanva1()}
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 bg-[#1A2432] rounded-xl p-6 shadow-lg">
                         {loadCanva2()}
                     </div>
                 </div>

@@ -15,13 +15,14 @@ const Graphv1 = () => {
             chartItem1.current = new Chart(ctx, {
                 type: "bar",
                 data: {
-                    labels: ["2020", "2021", "2022", "2023", "2024"],
+                    labels: ["2021", "2022", "2023"],
                     datasets: [{
                         label: "Population",
-                        data: [100, 200, 300, 400, 500],
-                        backgroundColor: "rgba(75, 192, 192, 0.6)",
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 1
+                        data: [100, 200, 300],
+                        backgroundColor: ["#8ecae6", "#219ebc", "#023047"],
+                        borderColor: "white",
+                        borderWidth: 1,
+                        fill: "white",
                     }]
                 },
                 options: {
@@ -30,10 +31,29 @@ const Graphv1 = () => {
                     plugins: {
                         legend: {
                             position: "top",
+                            labels: {
+                                color: 'white',
+                            }
                         },
                         title: {
                             display: true,
-                            text: "Population par année"
+                            text: "Population par année",
+                            color: 'white',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            },
+                        },
+                        datalabels: {
+                            color: '#ecececff',
+                            textShadowColor: 'black',
+                            textShadowBlur: 5,
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            },
+                            align: 'bottom',
+                            offset: 15,
                         }
                     }
                 }
