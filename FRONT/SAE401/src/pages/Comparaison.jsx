@@ -10,8 +10,12 @@ const GridCompar = () => {
             <Navbar></Navbar>
             <BtnCriteres></BtnCriteres>
             <div className="flex-1 flex flex-row p-4 pb-8 gap-4">
-                <Graphv1 />
-                <Graphv2 />
+                <div className="flex-1">
+                    <Graphv1 />
+                </div>
+                <div className="flex-1">
+                    <Graphv2 />
+                </div>
             </div>
         </div>
     );

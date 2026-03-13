@@ -36,6 +36,17 @@ const BtnCriteres = () => {
     const areValues1Selected = selectedValue1 !== ""; // selection des valeurs 1, pour l'affichage des graphiques
     const areValues2Selected = selectedValue2 !== ""; // selection des valeurs 2, pour l'affichage des graphiques
 
+    const loadCanva1 = () => {
+        if (areValues1Selected) {
+            return <Graphv1 />;
+        }
+    };
+    const loadCanva2 = () => {
+        if (areValues2Selected) {
+            return <Graphv2 />;
+        }
+    };
+
     return (
         <section className="bg-[#1A2432] rounded-xl p-6 m-4">
 
