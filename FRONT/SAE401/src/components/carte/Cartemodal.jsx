@@ -1,7 +1,8 @@
 import GraphCarte from "./GraphCarte"
 
-const Cartemodal = ({ isOpen, selectedDpt, onClose }) => {
+const Cartemodal = ({ isOpen, selectedDpt, onClose, activeYear }) => { 
     // Si la modale n'est pas ouverte ou qu'aucun département n'est sélectionné, on n'affiche rien.
+    // on utilise le props activeYear pour selectionner les données de l'année en question apres
     if (!isOpen || !selectedDpt) return null;
 
     return (
@@ -25,11 +26,11 @@ const Cartemodal = ({ isOpen, selectedDpt, onClose }) => {
                 </button>
 
                 {/* Titre de la modale montrant le nom du département sélectionné */}
-                <h1 className="text-white font-bold uppercase text-xs mb-2">{selectedDpt.name}</h1>
+                <h1 className="text-white font-bold uppercase text-xs mb-2">{selectedDpt.name} ({selectedDpt.id}) - Année {activeYear}</h1>
                 <hr className="border-white/10 mb-4" />
 
                 <div className="flex-1">
-                    <GraphCarte dptId={selectedDpt.id} />
+                    <GraphCarte dptId={selectedDpt.id} activeYear={activeYear} /> {/* on passe l'année en cours en props */}
                 </div>
             </div>
         </div>

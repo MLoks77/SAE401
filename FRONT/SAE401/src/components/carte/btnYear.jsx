@@ -4,13 +4,12 @@ import SearchBar from "../Searchbar";
 
 // Par Maxime Derènes
 
-const BtnYear = () => {
+const BtnYear = ({activeYear, setActiveYear}) => {
 
     // https://stackoverflow.com/questions/72918094/how-can-i-update-class-name-with-usestate-to-activate-the-necessary-css-conditio
     // https://medium.com/geekculture/using-reacts-state-to-update-css-dynamically-c9b45570340c
 
     const years = ["2021", "2022", "2023"];
-    const [activeYear, setActiveYear] = useState(years[0]); // Objet n°1 du tableau = année active
 
     // j'ai commenté pour le moment, c'est si vous souhaitez cacher la barre de recherche sur votre page
     // const location = useLocation(); // renvoie l'endroit où le composant se trouve

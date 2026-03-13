@@ -8,7 +8,7 @@ import axios from 'axios';
 // }
 
 const departementsService = axios.create({
-    baseURL: 'https://localhost:8000/api',
+    baseURL: 'http://localhost:8000/api',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
