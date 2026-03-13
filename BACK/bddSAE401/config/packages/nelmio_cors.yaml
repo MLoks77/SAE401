@@ -1,12 +1,17 @@
 nelmio_cors:
     defaults:
-        allow_origin: ['*'] # autorise toutes les origines
-        allow_methods: ['GET'] # autorise toutes les méthodes
-        allow_headers: ['*'] # autorise tous les headers
+        origin_regex: true
+        allow_origin: ['^http://localhost:[0-9]+'] # autorise React
+        allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'] # autorise certaines méthodes
+        allow_headers: ['Content-Type', 'Authorization'] # autorise certains headers
         expose_headers: ['Link'] # autorise tous les headers à être exposés
         max_age: 3600 # autorise le cache pendant 1 heure
     paths:
-        '^/api/': null
+        '^/api/':
+            allow_origin: ['^http://localhost:[0-9]+']
+            allow_headers: ['*'] # autorise tous les headers
+            allow_methods: ['POST', 'PUT', 'PATCH', 'GET', 'DELETE']
+            max_age: 3600
         '^/': null
 
 # composer require nelmio/cors-bundle
