@@ -38,6 +38,7 @@ const Carte = () => {
                     isOpen={isModalOpen}
                     selectedDpt={selectedDpt}
                     activeYear={activeYear} // on passe l'année en cours en props ici aussi
+                    setActiveYear={setActiveYear}
                     onClose={() => setIsModalOpen(false)}
                 />
             </div>
