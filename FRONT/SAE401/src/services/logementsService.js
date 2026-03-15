@@ -14,7 +14,7 @@ import axios from 'axios';
 // taux_logements_vacants
 
 const logementsService = axios.create({
-    baseURL: 'https://localhost:8000/api',
+    baseURL: 'http://localhost:8000/api',
     headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json'

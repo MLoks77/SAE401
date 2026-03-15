@@ -16,6 +16,7 @@ import {
 // https://chartjs-plugin-datalabels.netlify.app/guide/getting-started.html#integration
 Chart.register(ChartDataLabels);
 
+// forwardRef 
 const GraphChart = forwardRef(({
     activeGraphType,
     isReady,

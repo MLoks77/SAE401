@@ -8,7 +8,16 @@ import { getEtapeClassName } from "../../services/fonctionsglobales";
 
 // par maxime derènes
 
-const BtnCriteres = () => {
+// pour envoyer les fonctions du parent à l'enfant mais pouvoir les utiliser dans l'enfant on en fait des props
+
+const BtnCriteres = ({
+    selectedMetrique,
+    setSelectedMetrique,
+    selectedValue1,
+    setSelectedValue1,
+    selectedValue2,
+    setSelectedValue2
+}) => {
 
     // State pour stocker les deux listes
     const [areas, setAreas] = useState({ departements: [], regions: [] });
@@ -24,27 +33,13 @@ const BtnCriteres = () => {
 
     const Metriquesbtn = Metriques;
 
-    // partie 1
-    const [selectedMetrique, setSelectedMetrique] = useState("");
-    // Value 1
-    const [selectedValue1, setSelectedValue1] = useState("");
-    // Value 2
-    const [selectedValue2, setSelectedValue2] = useState("");
-
     //  GESTION DES ÉTAPES 
     const isEtape1Complete = selectedMetrique !== ""; // selection metrique
-    const areValues1Selected = selectedValue1 !== ""; // selection des valeurs 1, pour l'affichage des graphiques
-    const areValues2Selected = selectedValue2 !== ""; // selection des valeurs 2, pour l'affichage des graphiques
 
-    const loadCanva1 = () => {
-        if (areValues1Selected) {
-            return <Graphv1 />;
-        }
-    };
-    const loadCanva2 = () => {
-        if (areValues2Selected) {
-            return <Graphv2 />;
-        }
+    const handleReset = () => {
+        setSelectedValue1("");
+        setSelectedValue2("");
+        setSelectedMetrique("");
     };
 
     return (
@@ -52,7 +47,23 @@ const BtnCriteres = () => {
 
             <div className="flex flex-col mb-2">
                 {/* titre */}
-                <h1 className="text-2xl font-bold text-white mb-3">Comparer : <span className="text-sm ml-1 text-gray-400">Choisissez puis comparez les données de 2 zones de votre choix</span></h1>
+                <div className="flex flex-row items-center justify-between gap-6 w-full mb-5">
+                    <h1 className="text-2xl font-bold text-white mb-3">Comparer : <span className="text-sm ml-1 text-gray-400">Choisissez puis comparez les données de 2 zones de votre choix</span></h1>
+                    <button onClick={handleReset} title="Réinitialiser" className="bg-red-600 cursor-pointer hover:bg-red-700 text-white p-2 rounded-xl transition-all border border-red-500/20 group">
+                        <svg
+                            className="w-5 h-5 transition-transform duration-500 group-hover:rotate-360"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            style={{ transform: 'scaleX(-1)' }}
+                        >
+                            <path
+                                d="M6 7L7 6L4.70711 3.70711L5.19868 3.21553C5.97697 2.43724 7.03256 2 8.13323 2C11.361 2 14 4.68015 14 7.93274C14 11.2589 11.3013 14 8 14C6.46292 14 4.92913 13.4144 3.75736 12.2426L2.34315 13.6569C3.90505 15.2188 5.95417 16 8 16C12.4307 16 16 12.3385 16 7.93274C16 3.60052 12.4903 0 8.13323 0C6.50213 0 4.93783 0.647954 3.78447 1.80132L3.29289 2.29289L1 0L0 1V7H6Z"
+                                fill="currentColor"
+                            />
+                        </svg>
+                    </button>
+                </div>
             </div>
 
             {/* partie 1 */}
