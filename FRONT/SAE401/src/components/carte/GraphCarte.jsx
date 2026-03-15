@@ -59,12 +59,12 @@ const GraphCarte = ({ dptId, activeYear }) => {
             if (DataPopulation) {
                 labels.push("Chômage (%)", "Pauvreté (%)");
                 values.push(DataPopulation.taux_chomage, DataPopulation.taux_pauvrete);
-                colors.push("#FF6B6B", "#FFD93D");
+                colors.push("#023047", "#204ab3ff");
             }
             if (DataLogement) {
                 labels.push("L. Sociaux (%)", "L. Vacants (%)");
                 values.push(DataLogement.taux_logements_sociaux, DataLogement.taux_logements_vacants);
-                colors.push("#4ECDC4", "#6B46C1");
+                colors.push("#219ebc", "#8ecae6");
             }
 
             ChartInstanceRef.current = new Chart(ctx, {
@@ -109,13 +109,19 @@ const GraphCarte = ({ dptId, activeYear }) => {
     if (!DataPopulation && !DataLogement) return <div className="p-10 text-red-400">Aucune donnée disponible pour {activeYear}</div>;
 
     return (
-        <div className="space-y-8">
-            <div className="h-[35vh] bg-[#1F2937] p-6 rounded-2xl border border-white/5">
+        <div className="flex flex-col h-full gap-4">
+            <div className="grid grid-cols-[40%_60%] gap-4 flex-1">
+                <div className="bg-[#2b3c54] p-6 rounded-xl border border-white/10 h-full flex flex-col justify-center">
+                
+                </div>
+                <div className="bg-[#2b3c54] p-6 rounded-xl border border-white/10 h-full flex flex-col justify-center"></div>
+            </div>
+            
+            <div className="flex-1 min-h-0 bg-[#2b3c54] p-6 rounded-xl border border-white/5">
                 <canvas ref={chartRef}></canvas>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#1F2937] p-6 rounded-2xl border border-white/5">
+                {/* <div className="bg-[#2A2A35] p-6 rounded-2xl border border-white/5">
                     <h3 className="text-blue-400 font-bold text-xs uppercase tracking-widest mb-4">Statistiques détaillées</h3>
                     <div className="space-y-3">
                         <p className="flex justify-between text-sm">
@@ -133,8 +139,7 @@ const GraphCarte = ({ dptId, activeYear }) => {
                             </span>
                         </p>
                     </div>
-                </div>
-            </div>
+                </div> */}
         </div>
     );
 };

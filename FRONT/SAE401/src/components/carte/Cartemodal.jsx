@@ -13,7 +13,7 @@ const Cartemodal = ({ isOpen, selectedDpt, onClose, activeYear, setActiveYear })
             onClick={onClose}
         >
             <div
-                className="bg-[#2A2A35] border border-white/10 p-8 rounded-2xl shadow-2xl max-w-7xl w-full min-h-[50em] relative"
+                className="bg-[#1F2937] border border-white/10 p-8 rounded-2xl shadow-2xl max-w-7xl w-full h-[85vh] flex flex-col relative"
                 onClick={(e) => e.stopPropagation()}
             >
                 
@@ -64,7 +64,7 @@ const Cartemodal = ({ isOpen, selectedDpt, onClose, activeYear, setActiveYear })
 
                 <hr className="border-white/10 mb-6" />
 
-                <div className="flex-1">
+                <div className="flex-1 flex flex-col min-h-0">
                     <GraphCarte dptId={selectedDpt.id} activeYear={activeYear} /> {/* on passe l'année en cours en props */}
                 </div>
             </div>
