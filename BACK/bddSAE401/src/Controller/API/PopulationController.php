@@ -85,6 +85,7 @@ class PopulationController extends AbstractController
                 'annee' => $pop->getAnnee(),
                 'code_dept' => $pop->getCodeDept(),
                 'nb_habitants' => $pop->getNbHabitants(),
+                'densite' => $pop->getDensite(),
                 'accroissement' => $pop->getAccroissement(),
                 'pop_moins_20ans' => $pop->getPopMoins20ans(),
                 'pop_plus_60ans' => $pop->getPopPlus60ans(),
