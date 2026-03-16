@@ -1,7 +1,7 @@
 # SAE 401
 
 
-## Languages
+### Languages
 
 Cette SAE fut réalisé avec :
 
@@ -11,7 +11,7 @@ Cette SAE fut réalisé avec :
   <li>TailwindCSS</li>
 </ul>
 
-## Dépendances
+### Dépendances
 
 ### INSTALLER LES DEPENDANCES :
 
@@ -19,8 +19,8 @@ Cette SAE fut réalisé avec :
 npm install
 ```
 
-# Dans le cas où vous souhaitez installer un par un
-### INSTALLER LES DEPENDANCES BACK
+# Dans le cas où vous souhaitez installé un par un
+## INSTALLER LES DEPENDANCES BACK
 
 <ul>
 <li>Nelmios Cors Bundle</li>
@@ -30,7 +30,7 @@ composer require nelmio/cors-bundle
 ```
 </ul>
 
-### INSTALLER LES DEPENDANCES FRONT
+## INSTALLER LES DEPENDANCES FRONT
 
 <ul>
 <li>Axios</li>
@@ -46,7 +46,7 @@ npm install chart.js
 ```
 
 <li>Chartjs-plugin-datalabels</li>
-<li>https://www.npmjs.com/package/chartjs-plugin-datalabels</li>
+<li>https://www.npmjs.com/package/chartjs-plugin-datalabels</li><br>
 
 ```bash
 npm install chartjs-plugin-datalabels 
@@ -85,8 +85,14 @@ la base de donnée est disponible dans le back, dans le fichier data
 <ul>
     <li>
         api/logements
+    </li>
+    <li>
         api/departements
+    </li>
+  <li>
         api/regions
+  </li>
+  <li>
         api/population
     </li>
 </ul>
