@@ -65,12 +65,14 @@ npm install react-router-dom
 <p> Lancer dans une fenêtre du back </p>
 
 ```bash
+cd .\BACK\bddSAE401\
 symfony serve
 ```
 
 <p> Lancer dans une fenêtre du front </p>
 
 ```bash
+cd .\FRONT\SAE401\
 npm run dev
 ```
 ## BDD
