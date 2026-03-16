@@ -7,12 +7,6 @@ import axios from 'axios';
 // "taux_logements_sociaux": 26,
 // "taux_logements_vacants": 8
 
-
-//les données présentes ici sont:
-// nb_logements
-// taux_logements_sociaux
-// taux_logements_vacants
-
 const logementsService = axios.create({
     baseURL: 'https://localhost:8000/api',
     headers: {
