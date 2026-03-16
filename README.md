@@ -97,3 +97,25 @@ la base de donnée est disponible dans le back, dans le fichier data
     </li>
 </ul>
 
+# Problème Certificat
+
+<p>Suivant les utilisateurs, l'API peut être accessible via http ou https.</p>
+<p>Si vous rencontrez des problèmes avec le certificat, modifiez le texte de l'api dans le front dans les dossiers services</p>
+<p>Voici les fichiers à modifier :</p>
+<ul>
+    <li>
+        src/services/departementsService.js
+    </li>
+    <li>
+        src/services/logementsService.js
+    </li>
+    <li>
+        src/services/populationService.js
+    </li>
+    <li>
+        src/services/regionsService.js
+    </li>
+</ul>
+
+<p>Mettez http://localhost:8000/api/ si vous avez des problèmes avec le certificat</p>
+<p>Mettez https://localhost:8000/api/ si vous n'avez pas de problèmes avec le certificat</p>
