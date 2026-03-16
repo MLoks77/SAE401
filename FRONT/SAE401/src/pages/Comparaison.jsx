@@ -15,13 +15,13 @@ const GridCompar = () => {
 
     const loadCanva1 = () => {
         if (selectedValue1 !== "") {
-            return <Graphv1 />;
+            return <Graphv1 selectedValue1={selectedValue1} selectedMetrique={selectedMetrique} />;
         }
     };
 
     const loadCanva2 = () => {
         if (selectedValue2 !== "") {
-            return <Graphv2 />;
+            return <Graphv2 selectedValue2={selectedValue2} selectedMetrique={selectedMetrique} />;
         }
     };
 
@@ -31,7 +31,7 @@ const GridCompar = () => {
                 <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
                     <img src={favicon} alt="Logo" className="w-8 h-8" />
                 </div>
-                <p className="text-[#94a3b8] font-medium italic">Veuillez remplir au moins 1 critère pour commencer la visualisation</p>
+                <p className="text-[#94a3b8] font-medium italic">Veuillez remplir les champs pour commencer la comparaison</p>
             </div>
         );
     };

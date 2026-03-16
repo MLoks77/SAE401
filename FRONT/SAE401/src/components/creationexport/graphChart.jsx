@@ -63,13 +63,14 @@ const GraphChart = forwardRef(({
                 const typeAxe = selectedAxe;
                 const valeurZone = selectedRegion;
 
-                const params = {};
+                const params = {}; // vérifie si on a choisi département ou région
                 if (typeAxe === "departement") {
                     params.code_dept = valeurZone;
                 } else if (typeAxe === "region") {
                     params.id_region = valeurZone;
                 }
 
+                // choix métriques
                 const logementMetriques = [
                     "nb_logements",
                     "taux_logements_sociaux",
@@ -87,10 +88,23 @@ const GraphChart = forwardRef(({
 
                 let response;
 
+                // données liées aux métriques choisies
+                // si logement, on récupère les logements
+                // si population, on récupère les populations
+                // includes vérifie si le paramètre est dans le tableau
+                // await interrompt l'exécution d'une fonction asynchrone et attend la résolution d'une promesse
                 if (logementMetriques.includes(selectedMetriques)) {
                     response = await getLogements(params);
                 } else if (populationMetriques.includes(selectedMetriques)) {
                     response = await getPopulation(params);
+                }
+
+                // selectedMetriques = données
+                // tofixed pour les pourcentages
+                if (isPourcent) {
+                    response.data.forEach((item) => {
+                        item[selectedMetriques] = item[selectedMetriques].toFixed(2);
+                    });
                 }
 
                 if (response && response.data) {
@@ -101,10 +115,12 @@ const GraphChart = forwardRef(({
 
             } catch (error) {
                 console.error("Erreur lors du chargement des données", error);
-                setChartData([]);
+                setChartData([]); // On vide les données en cas d'erreurs
             } finally {
                 setIsLoading(false); // On arrête le chargement
             }
+
+
         };
 
         fetchMetriqueData();
