@@ -33,16 +33,18 @@ const Analyse = () => {
 
     // Effet pour dessiner et mettre à jour les graphiques quand les données ou l'état changent
     useEffect(() => {
+        // console.log(logements);
         if (logements.length === 0) return; // Ne rien dessiner si pas de données
 
         // Préparation des données
-        const uniqueDeps = [...new Set(logements.map(l => l.code_dept || l.nom || "Zone"))].sort();
-        const labels = uniqueDeps;
+        const uniqueRegions = [...new Set(logements.map(l => l.nom_region || l.libelle_region || l.region))].sort();
+        const labels = uniqueRegions;
 
         const getMetricForYear = (year, metric) => {
-            return uniqueDeps.map(dep => {
-                const record = logements.find(l => (l.code_dept === dep || l.nom === dep) && l.annee == year);
-                return record ? record[metric] : 0;
+            return uniqueRegions.map(region => {
+                const regionalRecords = logements.filter(l => (l.nom_region === region || l.libelle_region === region || l.region === region) && l.annee == year);
+                // return regionalRecords.reduce((acc, curr) => acc + (Number(curr[metric]) || 0), 0);
+                return regionalRecords ? regionalRecords[metric] : 0;
             });
         };
 
@@ -167,10 +169,49 @@ const Analyse = () => {
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#111822]">
-            <Navbar></Navbar>
+        <div className="h-screen flex flex-col overflow-hidden bg-[#111822]">
+            <Navbar />
 
-            <div className="flex-1 flex flex-col gap-8 p-6 mx-auto w-full max-w-7xl">
+            <div className="flex-1 flex flex-row gap-4 p-4 pb-8 overflow-hidden">
+                <div className="flex-1 flex flex-col items-center justify-center bg-[#152033] border-2 border-[#233348] text-white rounded-2xl shadow-lg p-6 overflow-y-auto">
+                    <h2 className="text-2xl font-bold">Taux de logements sociaux</h2>
+                    <span>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                        <div className="text-xl">blablalblalblalblalblalblalblablablalblalblalblalblalblalblablablalbla</div>
+                    </span>
+                </div>
+
+                <div className="flex-1 flex flex-col gap-4">
+
+                    <div className="flex-1 bg-[#152033] border-2 border-[#233348] rounded-2xl shadow-lg p-6">
+                        <canvas ref={barChartRef}></canvas>
+                    </div>
+
+                    <div className="flex-1 bg-[#152033] border-2 border-[#233348] rounded-2xl shadow-lg p-6">
+                        <canvas ref={lineChartRef}></canvas>
+                    </div>
+
+                </div>
+            </div>
+            {/*<div className="flex-1 flex flex-col gap-8 p-6 mx-auto w-full max-w-7xl">
 
                 <div className="flex flex-col bg-[#1A2432] border border-[#233348] border-2 rounded-2xl shadow-lg h-[35rem]">
                     <div className="flex justify-between items-center p-4 sm:p-6 border-b border-[#233348]">
@@ -190,7 +231,7 @@ const Analyse = () => {
                     </div>
                 </div>
 
-            </div>
+            </div>*/}
         </div>
     );
 };
