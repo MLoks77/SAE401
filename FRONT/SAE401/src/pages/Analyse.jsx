@@ -1,4 +1,4 @@
-// import Navbar from "../components/navbar";
+import Navbar from "../components/navbar";
 // import Chart from "chart.js/auto";
 // import ChartDataLabels from 'chartjs-plugin-datalabels';
 // import { useState, useEffect } from 'react';
@@ -148,7 +148,7 @@ const Analyse = () => {
 
     return (
         <div className="min-h-screen flex flex-col bg-[#111822]">
-            {/* <Navbar></Navbar>
+            <Navbar></Navbar>{/*
 
             <div className="flex-1 flex flex-col gap-8 p-6 mx-auto w-full max-w-7xl">
 
