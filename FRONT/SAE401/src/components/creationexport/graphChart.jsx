@@ -127,6 +127,10 @@ const GraphChart = forwardRef(({
                 labels.push(year);
                 values.push(value);
             }
+
+            if (isPourcent) {
+                values.push(value.toFixed(2));
+            }
         }
 
         return { labels, values };
