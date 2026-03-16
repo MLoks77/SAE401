@@ -117,5 +117,5 @@ la base de donnée est disponible dans le back, dans le fichier data
     </li>
 </ul>
 
-<p>Mettez http://localhost:8000/api/ si vous avez des problèmes avec le certificat</p>
-<p>Mettez https://localhost:8000/api/ si vous n'avez pas de problèmes avec le certificat</p>
+<p>Mettez http://localhost:8000/api si vous avez des problèmes avec le certificat</p>
+<p>Mettez https://localhost:8000/api si vous n'avez pas de problèmes avec le certificat</p>
