@@ -15,13 +15,13 @@ const GridCompar = () => {
 
     const loadCanva1 = () => {
         if (selectedValue1 !== "") {
-            return <Graphv1 />;
+            return <Graphv1 selectedValue1={selectedValue1} selectedMetrique={selectedMetrique} />;
         }
     };
 
     const loadCanva2 = () => {
         if (selectedValue2 !== "") {
-            return <Graphv2 />;
+            return <Graphv2 selectedValue2={selectedValue2} selectedMetrique={selectedMetrique} />;
         }
     };
 

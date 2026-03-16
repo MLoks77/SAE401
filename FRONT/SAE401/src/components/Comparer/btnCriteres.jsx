@@ -49,7 +49,8 @@ const BtnCriteres = ({
                 {/* titre */}
                 <div className="flex flex-row items-center justify-between gap-6 w-full mb-5">
                     <h1 className="text-2xl font-bold text-white mb-3">Comparer : <span className="text-sm ml-1 text-gray-400">Choisissez puis comparez les données de 2 zones de votre choix</span></h1>
-                    <button onClick={handleReset} title="Réinitialiser" className="bg-red-600 cursor-pointer hover:bg-red-700 text-white p-2 rounded-xl transition-all border border-red-500/20 group">
+                    {/* bouton reset */}
+                    <button onClick={handleReset} title="Réinitialiser" className={`${isEtape1Complete ? "opacity-100 pointer-events-auto" : "opacity-30 pointer-events-none grayscale"} bg-red-600 cursor-pointer hover:bg-red-700 text-white p-2 rounded-xl transition-all border border-red-500/20 group`}>
                         <svg
                             className="w-5 h-5 transition-transform duration-500 group-hover:rotate-360"
                             viewBox="0 0 16 16"
@@ -94,7 +95,7 @@ const BtnCriteres = ({
 
                         <optgroup label="Départements">
                             {areas.departements.map((dept) => (
-                                <option key={dept.code_dept} value={dept.nom_dept}>
+                                <option key={dept.code_dept} value={`dept-${dept.code_dept}`}>
                                     {dept.code_dept} - {dept.nom_dept}
                                 </option>
                             ))}
@@ -102,7 +103,7 @@ const BtnCriteres = ({
 
                         <optgroup label="Régions">
                             {areas.regions.map((reg) => (
-                                <option key={reg.id_region} value={reg.nom_region}>
+                                <option key={reg.id_region} value={`reg-${reg.id_region}`}>
                                     {capitalfirstletter(reg.nom_region)}
                                 </option>
                             ))}
@@ -119,7 +120,7 @@ const BtnCriteres = ({
 
                         <optgroup label="Départements">
                             {areas.departements.map((dept) => (
-                                <option key={dept.code_dept} value={dept.nom_dept}>
+                                <option key={dept.code_dept} value={`dept-${dept.code_dept}`}>
                                     {dept.code_dept} - {dept.nom_dept}
                                 </option>
                             ))}
@@ -127,7 +128,7 @@ const BtnCriteres = ({
 
                         <optgroup label="Régions">
                             {areas.regions.map((reg) => (
-                                <option key={reg.id_region} value={reg.nom_region}>
+                                <option key={reg.id_region} value={`reg-${reg.id_region}`}>
                                     {capitalfirstletter(reg.nom_region)}
                                 </option>
                             ))}
