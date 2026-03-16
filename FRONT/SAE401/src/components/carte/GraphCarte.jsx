@@ -15,6 +15,8 @@ const GraphCarte = ({ dptId, activeYear }) => {
     //pour utiliser chartjs
     const chartRef = useRef(null);
     const ChartInstanceRef = useRef(null);
+    const chartPie = useRef(null);
+    const ChartInstancePie = useRef(null);
 
     //Récupération des données depuis l'API
     useEffect(() => {
@@ -59,12 +61,12 @@ const GraphCarte = ({ dptId, activeYear }) => {
             if (DataPopulation) {
                 labels.push("Chômage (%)", "Pauvreté (%)");
                 values.push(DataPopulation.taux_chomage, DataPopulation.taux_pauvrete);
-                colors.push("#FF6B6B", "#FFD93D");
+                colors.push("#023047", "#204ab3ff");
             }
             if (DataLogement) {
                 labels.push("L. Sociaux (%)", "L. Vacants (%)");
                 values.push(DataLogement.taux_logements_sociaux, DataLogement.taux_logements_vacants);
-                colors.push("#4ECDC4", "#6B46C1");
+                colors.push("#219ebc", "#8ecae6");
             }
 
             ChartInstanceRef.current = new Chart(ctx, {
@@ -104,36 +106,105 @@ const GraphCarte = ({ dptId, activeYear }) => {
         }
     }, [loading, DataPopulation, DataLogement]);
 
+    useEffect(() => {
+        if (!loading && DataPopulation && chartPie.current) {
+            if (ChartInstancePie.current) ChartInstancePie.current.destroy();
+
+            const ctx = chartPie.current.getContext("2d");
+            const labelsPie = [];
+            const valuesPie = [];
+            const colorsPie = [];
+
+            if (DataPopulation) {
+                labelsPie.push("Chômage (%)", "Pauvreté (%)", "Accroissement (%)");
+                valuesPie.push(DataPopulation.taux_chomage, DataPopulation.taux_pauvrete, DataPopulation.accroissement);
+                colorsPie.push("#023047", "#204ab3ff", "#8ecae6");
+            }
+
+            ChartInstancePie.current = new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: labelsPie,
+                    datasets : [{
+                        data: valuesPie,
+                        backgroundColor: colorsPie,
+                        borderWidth: 2,
+                        borderColor: "white"
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            color: 'white',
+                            align: 'center',
+                            offset: 15,
+                            textShadowColor: 'black',
+                            textShadowBlur: 5,
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                        }
+                    }
+                }
+            });
+        }
+    }, [loading, DataPopulation]);
+
     if (loading) return <div className="p-10 text-blue-400 animate-pulse">Chargement des données...</div>;
 
     if (!DataPopulation && !DataLogement) return <div className="p-10 text-red-400">Aucune donnée disponible pour {activeYear}</div>;
 
     return (
-        <div className="space-y-8">
-            <div className="h-[35vh] bg-[#1F2937] p-6 rounded-2xl border border-white/5">
-                <canvas ref={chartRef}></canvas>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-                <div className="bg-[#1F2937] p-6 rounded-2xl border border-white/5">
-                    <h3 className="text-blue-400 font-bold text-xs uppercase tracking-widest mb-4">Statistiques détaillées</h3>
-                    <div className="space-y-3">
-                        <p className="flex justify-between text-sm">
-                            <span className="text-gray-400">Population :</span>
-                            <span className="text-white font-bold">{DataPopulation?.nb_habitants?.toLocaleString()} hab.</span>
-                        </p>
-                        <p className="flex justify-between text-sm">
-                            <span className="text-gray-400">Logements :</span>
-                            <span className="text-white font-bold">{DataLogement?.nb_logements?.toLocaleString()}</span>
-                        </p>
-                        <p className="flex justify-between text-sm">
-                            <span className="text-gray-400">Accroissement :</span>
-                            <span className={`font-bold ${DataPopulation?.accroissement >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                                {DataPopulation?.accroissement.toFixed(2)} %
-                            </span>
-                        </p>
-                    </div>
+        <div className="flex flex-col h-full gap-4">
+            <div className="grid grid-cols-[40%_60%] gap-4 flex-1">
+                <div className="bg-[#2b3c54] p-5 rounded-xl border border-white/10 flex flex-col justify-center items-center">
+                    <canvas ref={chartPie}></canvas>
                 </div>
+                <div className="bg-[#2b3c54] p-6 rounded-xl border border-white/10 h-full flex flex-col mr-4">
+                    <h1 className="text-white font-bold flex-start mb-4 uppercase tracking-wider">Données textuelles</h1>
+                    <table className="w-full border border-white">
+                        <thead className="border border-white bg-[#219ebc]">
+                            <tr className="border border-white text-center">
+                                <th className="text-white border border-white">Nom</th>
+                                <th className="text-white border border-white">Valeur</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-center border border-white">
+                            <tr>
+                                <td className="text-white border border-white">Nombre d'habitants</td>
+                                <td className="text-white border border-white">{DataPopulation?.nb_habitants?.toLocaleString()}</td>
+                            </tr>
+                            <tr>
+                                <td className="text-white border border-white">Accroissement (%)</td>
+                                <td className="text-white border border-white">{DataPopulation?.accroissement} %</td>
+                            </tr>
+                            <tr>
+                                <td className="text-white border border-white">Population moins de 20 ans</td>
+                                <td className="text-white border border-white">{DataPopulation?.pop_moins_20ans} %</td>
+                            </tr>
+                            <tr>
+                                <td className="text-white border border-white">Population plus de 60 ans</td>
+                                <td className="text-white border border-white">{DataPopulation?.pop_plus_60ans} %</td>
+                            </tr>
+                            <tr>
+                                <td className="text-white border border-white">Taux de chômage (%)</td>
+                                <td className="text-white border border-white">{DataPopulation?.taux_chomage} %</td>
+                            </tr>
+                            <tr>
+                                <td className="text-white border border-white">Taux de pauvreté (%)</td>
+                                <td className="text-white border border-white">{DataPopulation?.taux_pauvrete} %</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div className="flex-1 min-h-0 bg-[#2b3c54] p-6 rounded-xl border border-white/5">
+                <canvas ref={chartRef}></canvas>
             </div>
         </div>
     );
