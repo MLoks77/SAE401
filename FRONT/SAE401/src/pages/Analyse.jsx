@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 const Analyse = () => {
     const [error, setError] = useState(null);
+    const [analysisType, setAnalysisType] = useState('Analyse globale');
 
     if (error) {
         return (
@@ -23,12 +24,12 @@ const Analyse = () => {
 
     return (
         <div className="h-screen flex flex-col overflow-hidden bg-[#111822]">
-            <Navbar />
+            <Navbar analysisType={analysisType} setAnalysisType={setAnalysisType} />
             <div className="flex-1 flex flex-row gap-4 p-4 pb-8 overflow-hidden">
-                <Texte />
+                <Texte analysisType={analysisType} />
                 <div className="flex-1 flex flex-col gap-4">
-                    <Graph1 />
-                    <Graph2 />
+                    <Graph1 analysisType={analysisType} />
+                    <Graph2 analysisType={analysisType} />
                 </div>
             </div>
         </div>
