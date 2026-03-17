@@ -1,7 +1,7 @@
-function Texte() {
+function Texte({ analysisType }) {
     return (
         <div className="flex-1 flex flex-col bg-[#152033] border-2 border-[#233348] text-white rounded-2xl shadow-lg p-6 overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-6 top-0 bg-[#152033] py-2">Analyse régionale</h2>
+            <h2 className="text-2xl font-bold mb-6 top-0 bg-[#152033] py-2">{analysisType}</h2>
             <div className="space-y-6 text-left">
                 <section>
                     <h3 className="text-xl font-semibold text-[#00B4D8] mb-2">1. Dynamique Démographique : Le Grand Écart</h3>

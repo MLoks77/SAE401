@@ -6,13 +6,18 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 ChartJS.register(...registerables, ChartDataLabels);
 
-const Graph1 = () => {
+const Graph1 = ({ analysisType }) => {
     const [logements, setLogements] = useState([]);
     const [population, setPopulation] = useState([]);
     const [error, setError] = useState(null);
 
     // Références vers nos éléments Canvas
     const barChartRef = useRef(null);
+    const regionsMapping = {
+        'Hauts-de-France': ['02', '59', '60', '62', '80'],
+        'Auvergne Rhône-Alpes': ['01', '03', '07', '15', '26', '38', '42', '43', '63', '69', '73', '74'],
+        'Réunion': ['974']
+    };
 
     // Références vers les instances de Chart pour pouvoir les détruire à la mise à jour
     const barChartInstance = useRef(null);
@@ -55,7 +60,27 @@ const Graph1 = () => {
             ];
         };
 
-        const getGlobalPopMetricForYear = (year) => {
+        const getRegionalMetric = (regionName) => {
+            const codes = regionsMapping[regionName];
+            // Filtrer les données pour ces départements (ex: pour l'année 2023)
+            const regionData = logements.filter(l => codes.includes(l.code_dept) && l.annee === 2023);
+
+            if (regionData.length === 0) return [0, 0, 0];
+
+            // Calculer le total pour 'nb_logements'
+            const total = regionData.reduce((acc, curr) => acc + (Number(curr.nb_logements) || 0), 0);
+            // Calculer la moyenne pour les taux
+            const avgSociaux = regionData.reduce((acc, curr) => acc + (Number(curr.taux_logements_sociaux) || 0), 0) / regionData.length;
+            const avgVacants = regionData.reduce((acc, curr) => acc + (Number(curr.taux_logements_vacants) || 0), 0) / regionData.length;
+
+            return [
+                Math.round(total / 100000 * 10) / 10,
+                Math.round(avgSociaux * 10) / 10,
+                Math.round(avgVacants * 10) / 10
+            ];
+        };
+
+        /* const getGlobalPopMetricForYear = (year) => {
             const yearData = population.filter(p => p.annee == year);
             if (yearData.length === 0) return [0, 0, 0];
 
@@ -69,77 +94,134 @@ const Graph1 = () => {
                 Math.round((totalSoldeHumain / 10) * 10) / 10,
                 Math.round(avgPauvrete * 10) / 10
             ];
-        };
+        }; */
 
         if (barChartInstance.current) {
             barChartInstance.current.destroy();
         }
 
-        const barCtx = barChartRef.current.getContext('2d');
-        barChartInstance.current = new ChartJS(barCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Nombre de logements (x100 000)', 'Taux logements sociaux (%)', 'Taux logements vacants (%)'],
-                datasets: [
-                    {
-                        label: '2021',
-                        data: getGlobalMetricForYear(2021),
-                        backgroundColor: '#00B4D8'
-                    },
-                    {
-                        label: '2022',
-                        data: getGlobalMetricForYear(2022),
-                        backgroundColor: '#1E13EC'
-                    },
-                    {
-                        label: '2023',
-                        data: getGlobalMetricForYear(2023),
-                        backgroundColor: '#136DED'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'top', labels: { color: 'white' } },
-                    title: {
-                        display: true,
-                        text: 'Indicateurs de logements',
-                        color: 'white',
-                        font: { size: 16 }
-                    },
-                    datalabels: {
-                        color: 'white',
-                        anchor: 'end',
-                        align: 'top',
-                        offset: 4,
-                        font: { weight: 'bold', size: 11 },
-                        formatter: (value) => value
-                    }
+        if (analysisType === 'Analyse globale') {
+            const barCtx = barChartRef.current.getContext('2d');
+            barChartInstance.current = new ChartJS(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Nombre de logements (x100 000)', 'Taux logements sociaux (%)', 'Taux logements vacants (%)'],
+                    datasets: [
+                        {
+                            label: '2021',
+                            data: getGlobalMetricForYear(2021),
+                            backgroundColor: '#00B4D8'
+                        },
+                        {
+                            label: '2022',
+                            data: getGlobalMetricForYear(2022),
+                            backgroundColor: '#1E13EC'
+                        },
+                        {
+                            label: '2023',
+                            data: getGlobalMetricForYear(2023),
+                            backgroundColor: '#136DED'
+                        }
+                    ]
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        suggestedMax: 50,
-                        grid: { color: "rgba(255, 255, 255, 0.1)" },
-                        ticks: { color: "white" }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { color: 'white' } },
+                        title: {
+                            display: true,
+                            text: 'Indicateurs de logements',
+                            color: 'white',
+                            font: { size: 16 }
+                        },
+                        datalabels: {
+                            color: 'white',
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 4,
+                            font: { weight: 'bold', size: 11 },
+                            formatter: (value) => value
+                        }
                     },
-                    x: { grid: { color: "rgba(255, 255, 255, 0.1)" }, ticks: { color: "white" } }
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 50,
+                            grid: { color: "rgba(255, 255, 255, 0.1)" },
+                            ticks: { color: "white" }
+                        },
+                        x: { grid: { color: "rgba(255, 255, 255, 0.1)" }, ticks: { color: "white" } }
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            const barCtx = barChartRef.current.getContext('2d');
+            barChartInstance.current = new ChartJS(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Nombre de logements (x100 000)', 'Taux logements sociaux (%)', 'Taux logements vacants (%)'],
+                    datasets: [
+                        {
+                            label: 'Hauts - de - France',
+                            data: getRegionalMetric('Hauts-de-France'),
+                            backgroundColor: '#00B4D8'
+                        },
+                        {
+                            label: 'Auvergne Rhône - Alpes',
+                            data: getRegionalMetric('Auvergne Rhône-Alpes'),
+                            backgroundColor: '#1E13EC'
+                        },
+                        {
+                            label: 'Réunion',
+                            data: getRegionalMetric('Réunion'),
+                            backgroundColor: '#136DED'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { color: 'white' } },
+                        title: {
+                            display: true,
+                            text: 'Indicateurs de logements',
+                            color: 'white',
+                            font: { size: 16 }
+                        },
+                        datalabels: {
+                            color: 'white',
+                            anchor: 'end',
+                            align: 'top',
+                            offset: 4,
+                            font: { weight: 'bold', size: 11 },
+                            formatter: (value) => value
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            suggestedMax: 50,
+                            grid: { color: "rgba(255, 255, 255, 0.1)" },
+                            ticks: { color: "white" }
+                        },
+                        x: { grid: { color: "rgba(255, 255, 255, 0.1)" }, ticks: { color: "white" } }
+                    }
+                }
+            });
+        }
 
         // Fonction de nettoyage: Détruire les instances si le composant est démonté
         return () => {
             if (barChartInstance.current) barChartInstance.current.destroy();
         };
 
-    }, [logements, population]); // L'effet se déclenche quand logements ou population change
+    }, [logements, population, analysisType]); // L'effet se déclenche quand logements ou population change
 
     return (
         <div className="flex-1 bg-[#152033] border-2 border-[#233348] rounded-2xl shadow-lg p-6">
-            <canvas ref={barChartRef}></canvas>
+            <canvas ref={barChartRef} analysisType={analysisType === "Analyse globale" ? "Analyse globale" : "Analyse régionale"}></canvas>
         </div>
     );
 };
