@@ -319,9 +319,9 @@ class ImportStatistiquesDepartementCommand extends Command
         if (in_array($code, ['2A', '2B'], true)) {
             return $code;
         }
-        // drop leading zeros for numeric codes so they match the values
-        // already present in the database (1..9 not stored as 01..09).
-        $code = ltrim($code, '0');
+        // On ajoute un zéro pour les départements de 1 à 9 pour qu'ils 
+        // correspondent aux id de la base de données (01, 02.. 09).
+        $code = str_pad($code, 2, '0', STR_PAD_LEFT);
 
         return $code;
     }
