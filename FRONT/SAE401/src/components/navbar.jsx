@@ -16,7 +16,7 @@ const Navbar = ({ analysisType, setAnalysisType }) => {
     return (
         <nav className="bg-[#0A1420] flex items-center p-4">
             <div className="flex-1 flex items-center justify-start">
-                <img src={favicon} alt="Logo" className="w-8 h-8" />
+                <NavLink to="/" ><img src={favicon} alt="Logo" className="w-8 h-8" /></NavLink>
             </div>
 
             <div className="flex-1 flex items-center justify-center">

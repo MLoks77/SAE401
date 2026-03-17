@@ -1,12 +1,8 @@
 import Navbar from "../components/navbar";
-import Texte from "../components/analyse/Texte";
+import Texte from "../components/analyse/TexteRegionale";
 import Graph1 from "../components/analyse/Graph1";
 import Graph2 from "../components/analyse/Graph2";
-import { Chart as ChartJS, registerables } from 'chart.js';
 import { useState } from 'react';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
-
-ChartJS.register(...registerables, ChartDataLabels);
 
 const Analyse = () => {
     const [error, setError] = useState(null);
@@ -19,7 +15,7 @@ const Analyse = () => {
                 <div className="flex-1 flex flex-col items-center justify-center text-red-500 text-xl text-center p-5">
                     <p>Erreur lors du chargement des données ({error}).</p>
                     <p className="text-sm mt-3 text-white max-w-xl">
-                        C'est probablement dû à une erreur du CORS. Vérifier que le backend (Symfony) autorise les requêtes provenant de http://localhost:5173.
+                        Erreur de fetch
                     </p>
                 </div>
             </div>
