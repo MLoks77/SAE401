@@ -17,11 +17,12 @@ const Navbar = ({ analysisType, setAnalysisType }) => {
         <nav className="bg-[#0A1420] flex items-center p-4">
             <div className="flex-1 flex items-center justify-start">
                 <NavLink to="/" ><img src={favicon} alt="Logo" className="w-8 h-8" /></NavLink>
+                <div className="flex-1 flex items-center ml-10">
+                    {showBtnAutreAnalyse && <BtnAutreAnalyse analysisType={analysisType} setAnalysisType={setAnalysisType} />}
+                </div>
             </div>
 
-            <div className="flex-1 flex items-center justify-center">
-                {showBtnAutreAnalyse && <BtnAutreAnalyse analysisType={analysisType} setAnalysisType={setAnalysisType} />}
-            </div>
+
 
             <div className="flex-1 flex items-center justify-center">
                 {showSearchBar && <Searchbar />}
