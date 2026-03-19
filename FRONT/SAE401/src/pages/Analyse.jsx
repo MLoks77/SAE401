@@ -1,5 +1,5 @@
 import Navbar from "../components/navbar";
-import Texte from "../components/analyse/TexteRegionale";
+import Texte from "../components/analyse/Texte";
 import Graph1 from "../components/analyse/Graph1";
 import Graph2 from "../components/analyse/Graph2";
 import { useState } from 'react';
