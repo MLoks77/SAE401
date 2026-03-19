@@ -133,10 +133,20 @@ const GraphCarte = ({ dptId, activeYear }) => {
                     }]
                 },
                 options: {
-                    responsive: false,
+                    responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { display: false },
+                        legend: { 
+                            display: true, 
+                            position: 'bottom', 
+                            align: 'center', 
+                            labels: { 
+                                color: 'white',
+                                font: { size: 11, weight: 'bold' },
+                                usePointStyle: true,
+                                padding: 15
+                            }
+                        },
                         datalabels: {
                             color: 'white',
                             align: 'center',
@@ -147,7 +157,7 @@ const GraphCarte = ({ dptId, activeYear }) => {
                                 size: 14,
                                 weight: 'bold'
                             },
-                        }
+                        },
                     }
                 }
             });
@@ -161,7 +171,7 @@ const GraphCarte = ({ dptId, activeYear }) => {
     return (
         <div className="flex flex-col h-full gap-4">
             <div className="grid grid-cols-[40%_60%] gap-4 flex-1">
-                <div className="bg-[#2b3c54] p-5 rounded-xl border border-white/10 flex flex-col justify-center items-center">
+                <div className="bg-[#2b3c54] p-5 rounded-xl border border-white/10 flex flex-col justify-center items-center relative w-full h-full min-h-[300px]">
                     <canvas ref={chartPie}></canvas>
                 </div>
                 <div className="bg-[#2b3c54] p-6 rounded-xl border border-white/10 h-full flex flex-col mr-4">
