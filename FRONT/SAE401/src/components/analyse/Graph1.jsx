@@ -99,17 +99,17 @@ const Graph1 = ({ analysisType }) => {
                         {
                             label: '2021',
                             data: getGlobalMetricForYear(2021),
-                            backgroundColor: '#00B4D8'
+                            backgroundColor: "#8ecae6"
                         },
                         {
                             label: '2022',
                             data: getGlobalMetricForYear(2022),
-                            backgroundColor: '#1E13EC'
+                            backgroundColor: "#219ebc"
                         },
                         {
                             label: '2023',
                             data: getGlobalMetricForYear(2023),
-                            backgroundColor: '#136DED'
+                            backgroundColor: "#023047"
                         }
                     ]
                 },
@@ -154,17 +154,17 @@ const Graph1 = ({ analysisType }) => {
                         {
                             label: 'Hauts - de - France',
                             data: getRegionalMetric('Hauts-de-France'),
-                            backgroundColor: '#00B4D8'
+                            backgroundColor: "#8ecae6"
                         },
                         {
                             label: 'Auvergne Rhône - Alpes',
                             data: getRegionalMetric('Auvergne Rhône-Alpes'),
-                            backgroundColor: '#1E13EC'
+                            backgroundColor: "#219ebc"
                         },
                         {
                             label: 'Réunion',
                             data: getRegionalMetric('Réunion'),
-                            backgroundColor: '#136DED'
+                            backgroundColor: "#023047"
                         }
                     ]
                 },

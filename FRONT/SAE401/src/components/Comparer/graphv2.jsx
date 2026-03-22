@@ -125,7 +125,7 @@ const Graphv2 = ({ selectedValue2, selectedMetrique }) => {
                     datasets: [{
                         label: metriqueLabel,
                         data: filteredChartData.values,
-                        backgroundColor: ["#8ecae6", "#219ebc", "#023047", "#ffb703", "#fb8500"],
+                        backgroundColor: ["#8ecae6", "#219ebc", "#023047"],
                         borderColor: "white",
                         borderWidth: 1,
                     }]

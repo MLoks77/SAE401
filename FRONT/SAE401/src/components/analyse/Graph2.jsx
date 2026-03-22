@@ -94,17 +94,17 @@ const Graph2 = ({ analysisType }) => {
                 {
                     label: '2021',
                     data: getGlobalPopMetricForYear(2021),
-                    backgroundColor: '#00B4D8'
+                    backgroundColor: "#8ecae6"
                 },
                 {
                     label: '2022',
                     data: getGlobalPopMetricForYear(2022),
-                    backgroundColor: '#1E13EC'
+                    backgroundColor: "#219ebc"
                 },
                 {
                     label: '2023',
                     data: getGlobalPopMetricForYear(2023),
-                    backgroundColor: '#136DED'
+                    backgroundColor: "#023047"
                 }
             ]
         } : {
@@ -113,17 +113,17 @@ const Graph2 = ({ analysisType }) => {
                 {
                     label: 'Hauts-de-France',
                     data: getRegionalPopMetric('Hauts-de-France'),
-                    backgroundColor: '#00B4D8'
+                    backgroundColor: "#8ecae6"
                 },
                 {
                     label: 'Auvergne Rhône-Alpes',
                     data: getRegionalPopMetric('Auvergne Rhône-Alpes'),
-                    backgroundColor: '#1E13EC'
+                    backgroundColor: "#219ebc"
                 },
                 {
                     label: 'Réunion',
                     data: getRegionalPopMetric('Réunion'),
-                    backgroundColor: '#136DED'
+                    backgroundColor: "#023047"
                 }
             ]
         };

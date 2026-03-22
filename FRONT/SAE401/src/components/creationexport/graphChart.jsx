@@ -185,6 +185,13 @@ const GraphChart = forwardRef(({
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 25,
+                            right: 25,
+                            top: 10,
+                        }
+                    },
                     plugins: {
                         title: {
                             display: true,
@@ -248,6 +255,7 @@ const GraphChart = forwardRef(({
                     scales: activeGraphType?.type !== "Camembert" ? {
                         y: {
                             beginAtZero: true,
+                            grace: '5%',
                             grid: { color: "rgba(255, 255, 255, 0.1)" },
                             ticks: {
                                 color: "white",
@@ -257,6 +265,7 @@ const GraphChart = forwardRef(({
                             }
                         },
                         x: {
+                            offset: true,
                             ticks: { color: "white" }
                         }
                     } : {}
@@ -272,7 +281,7 @@ const GraphChart = forwardRef(({
                     {isLoading && (
                         <div className="absolute inset-0 z-10 bg-[#111822]/40 flex flex-col items-center justify-center backdrop-blur-[2px] gap-4">
                             <div className="w-12 h-12 border-4 border-[#111822]/20 border-t-[#111822] rounded-full animate-spin"></div>
-                            <p className="text-blue-400 font-medium animate-pulse text-sm">Récupération des données...</p>
+                            <p className="text-blue-600 font-medium animate-pulse text-sm">Récupération des données...</p>
                         </div>
                     )}
 
