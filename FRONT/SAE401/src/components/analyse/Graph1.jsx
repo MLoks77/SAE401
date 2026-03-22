@@ -80,22 +80,6 @@ const Graph1 = ({ analysisType }) => {
             ];
         };
 
-        /* const getGlobalPopMetricForYear = (year) => {
-            const yearData = population.filter(p => p.annee == year);
-            if (yearData.length === 0) return [0, 0, 0];
-
-            const avgDensite = yearData.reduce((acc, curr) => acc + (Number(curr.densite) || 0), 0) / yearData.length;
-            const totalSoldeHumain = yearData.reduce((acc, curr) => acc + (Number(curr.accroissement) || 0), 0);
-            const avgPauvrete = yearData.reduce((acc, curr) => acc + (Number(curr.taux_pauvrete) || 0), 0) / yearData.length;
-
-            // Échelle harmonisée : densités et accroissements divisés par 10 pour être comparables au taux de pauvreté (~15)
-            return [
-                Math.round((avgDensite / 10) * 10) / 10,
-                Math.round((totalSoldeHumain / 10) * 10) / 10,
-                Math.round(avgPauvrete * 10) / 10
-            ];
-        }; */
-
         if (barChartInstance.current) {
             barChartInstance.current.destroy();
         }
