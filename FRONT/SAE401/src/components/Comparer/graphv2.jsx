@@ -25,7 +25,7 @@ const Graphv2 = ({ selectedValue2, selectedMetrique }) => {
         return m?.isPourcent === "oui";
     }, [metrique]);
 
-    const isReady = lieu !== "" && metrique !== "";
+    const isReady = lieu !== "" && metrique !== ""; // vérifie si le lieu et la métrique sont sélectionnés
 
     useEffect(() => {
         const fetchMetriqueData = async () => {
@@ -34,11 +34,11 @@ const Graphv2 = ({ selectedValue2, selectedMetrique }) => {
             setIsLoading(true);
             try {
                 const params = {};
-                if (lieu.startsWith("dept-")) {
+                if (lieu.startsWith("dept-")) { // si le lieu commence par "dept-", on récupère le code du département
                     params.code_dept = lieu.split("-")[1];
-                } else if (lieu.startsWith("reg-")) {
+                } else if (lieu.startsWith("reg-")) { // si le lieu commence par "reg-", on récupère l'id de la région
                     params.id_region = lieu.split("-")[1];
-                } else {
+                } else { // sinon, on récupère le code du département
                     params.code_dept = lieu;
                 }
 
@@ -68,10 +68,10 @@ const Graphv2 = ({ selectedValue2, selectedMetrique }) => {
                 if (response && response.data) {
                     let data = Array.isArray(response.data) ? response.data : [response.data];
 
-                    if (isPourcent) {
+                    if (isPourcent) { // si la métrique est un pourcentage, on formate les données pour ensuite les afficher avec le symbole %
                         data = data.map((item) => ({
                             ...item,
-                            [metrique]: item[metrique] ? Number(item[metrique]).toFixed(2) : 0
+                            [metrique]: item[metrique] ? Number(item[metrique]).toFixed(2) : 0 // on met 0 si la donnée est nulle, les données ont 2 chiffres après la virgule
                         }));
                     }
                     setChartData(data);
@@ -133,6 +133,11 @@ const Graphv2 = ({ selectedValue2, selectedMetrique }) => {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 15
+                        }
+                    },
                     plugins: {
                         legend: {
                             position: "top",
@@ -154,6 +159,8 @@ const Graphv2 = ({ selectedValue2, selectedMetrique }) => {
                     },
                     scales: {
                         y: {
+                            beginAtZero: true,
+                            grace: '5%',
                             ticks: { color: 'white' },
                             grid: { color: 'rgba(255, 255, 255, 0.1)' }
                         },

@@ -140,6 +140,11 @@ const Graphv1 = ({ selectedValue1, selectedMetrique }) => {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 15
+                        }
+                    },
                     plugins: {
                         legend: {
                             position: "top",
@@ -161,6 +166,8 @@ const Graphv1 = ({ selectedValue1, selectedMetrique }) => {
                     },
                     scales: {
                         y: {
+                            beginAtZero: true,
+                            grace: '5%',
                             ticks: { color: 'white' },
                             grid: { color: 'rgba(255, 255, 255, 0.1)' }
                         },
