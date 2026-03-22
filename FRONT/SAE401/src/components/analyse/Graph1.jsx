@@ -10,6 +10,7 @@ const Graph1 = ({ analysisType }) => {
     const [logements, setLogements] = useState([]);
     const [population, setPopulation] = useState([]);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false); // État de chargement de l'api
 
     // Références vers nos éléments Canvas
     const barChartRef = useRef(null);
@@ -23,6 +24,7 @@ const Graph1 = ({ analysisType }) => {
     const barChartInstance = useRef(null);
 
     useEffect(() => {
+        setIsLoading(true);
         Promise.all([getLogements(), getPopulation()])
             .then(([logementsRes, populationRes]) => {
                 const logementsData = Array.isArray(logementsRes.data) ? logementsRes.data :
@@ -37,6 +39,9 @@ const Graph1 = ({ analysisType }) => {
             .catch(err => {
                 console.error("Erreur API : ", err);
                 setError(err.message);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     }, []);
 
@@ -205,7 +210,17 @@ const Graph1 = ({ analysisType }) => {
 
     return (
         <div className="flex-1 bg-[#152033] border-2 border-[#233348] rounded-2xl shadow-lg p-6">
-            <canvas ref={barChartRef} analysisType={analysisType === "Analyse globale" ? "Analyse globale" : "Analyse régionale"}></canvas>
+            {isLoading ? (
+                <div className="flex items-center justify-center h-full">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+                </div>
+            ) : error ? (
+                <div className="flex items-center justify-center h-full text-red-500">
+                    Erreur de chargement des données
+                </div>
+            ) : (
+                <canvas ref={barChartRef} analysisType={analysisType === "Analyse globale" ? "Analyse globale" : "Analyse régionale"}></canvas>
+            )}
         </div>
     );
 };
