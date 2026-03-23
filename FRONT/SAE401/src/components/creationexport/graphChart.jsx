@@ -36,7 +36,7 @@ const GraphChart = forwardRef(({
     const [chartData, setChartData] = useState([]); // Données de l'api
     const [isLoading, setIsLoading] = useState(false); // État de chargement de l'api
 
-    useEffect(() => {
+    useEffect(() => { // set le choix du departement ou region
         const fetchData = async () => {
             try {
                 const [deptsRes, regionsRes] = await Promise.all([
@@ -54,7 +54,7 @@ const GraphChart = forwardRef(({
 
 
     // useeffect qui récupère les données de l'api : avec différents params
-    useEffect(() => {
+    useEffect(() => { // partie où on va choisir les données qu'on affiche
         const fetchMetriqueData = async () => {
             if (!isReady || !selectedMetriques || !selectedRegion) return;
 
@@ -93,17 +93,17 @@ const GraphChart = forwardRef(({
                 // si population, on récupère les populations
                 // includes vérifie si le paramètre est dans le tableau
                 // await interrompt l'exécution d'une fonction asynchrone et attend la résolution d'une promesse
-                if (logementMetriques.includes(selectedMetriques)) {
-                    response = await getLogements(params);
-                } else if (populationMetriques.includes(selectedMetriques)) {
-                    response = await getPopulation(params);
+                if (logementMetriques.includes(selectedMetriques)) { // si on a choisi logement
+                    response = await getLogements(params); // on récupère les logements
+                } else if (populationMetriques.includes(selectedMetriques)) { // si on a choisi population
+                    response = await getPopulation(params); // on récupère les populations
                 }
 
                 // selectedMetriques = données
                 // tofixed pour les pourcentages
-                if (isPourcent) {
-                    response.data.forEach((item) => {
-                        item[selectedMetriques] = item[selectedMetriques].toFixed(2);
+                if (isPourcent) { // si on a choisi pourcent
+                    response.data.forEach((item) => { // on parcourt les données
+                        item[selectedMetriques] = item[selectedMetriques].toFixed(2); // on met en format pourcentage + 2 chiffres après la virgule
                     });
                 }
 

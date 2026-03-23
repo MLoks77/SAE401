@@ -103,7 +103,7 @@ const Graphv1 = ({ selectedValue1, selectedMetrique }) => {
         // On trie par année pour avoir un graphique cohérent
         const sortedData = [...chartData].sort((a, b) => Number(a.annee) - Number(b.annee));
 
-        sortedData.forEach(record => {
+        sortedData.forEach(record => { // trie par année
             const val = record[metrique];
             if (val !== undefined && val !== null) {
                 labels.push(record.annee);
