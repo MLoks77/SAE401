@@ -1,7 +1,10 @@
 import Chart from "chart.js/auto";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+
 import { useEffect, useRef, useState, useMemo } from "react";
+
 import favicon from "/favicon/favicon.ico";
+
 import { getLogements, getPopulation } from "../../services/ServicesPages/ComparaisonService";
 import { Metriques } from "../../services/fonctionsglobales";
 
