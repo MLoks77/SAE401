@@ -111,6 +111,10 @@ const Graphv2 = ({ selectedValue2, selectedMetrique }) => {
         return { labels, values };
     }, [chartData, metrique]);
 
+    // metriquelabel
+    // filteredChartData
+
+
     useEffect(() => {
         if (chartRef2.current && filteredChartData.labels.length > 0) { // vérification si y'a des données ou pas
             const ctx = chartRef2.current.getContext("2d");
