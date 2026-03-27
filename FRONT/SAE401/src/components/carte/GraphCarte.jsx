@@ -64,7 +64,7 @@ const GraphCarte = ({ dptId, activeYear }) => {
                 colors.push("#023047", "#204ab3ff");
             }
             if (DataLogement) {
-                labels.push("L. Sociaux (%)", "L. Vacants (%)");
+                labels.push("Logements Sociaux (%)", "Logements Vacants (%)");
                 values.push(DataLogement.taux_logements_sociaux, DataLogement.taux_logements_vacants);
                 colors.push("#219ebc", "#8ecae6");
             }
@@ -83,7 +83,7 @@ const GraphCarte = ({ dptId, activeYear }) => {
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { 
+                    plugins: {
                         legend: { display: false },
                         datalabels: {
                             color: 'white',
@@ -116,16 +116,22 @@ const GraphCarte = ({ dptId, activeYear }) => {
             const colorsPie = [];
 
             if (DataPopulation) {
-                labelsPie.push("Chômage (%)", "Pauvreté (%)", "Accroissement (%)");
-                valuesPie.push(DataPopulation.taux_chomage, DataPopulation.taux_pauvrete, DataPopulation.accroissement);
-                colorsPie.push("#023047", "#204ab3ff", "#8ecae6");
+                if (DataPopulation.accroissement > 0) {
+                    labelsPie.push("Chômage (%)", "Pauvreté (%)", "Accroissement (%)");
+                    valuesPie.push(DataPopulation.taux_chomage, DataPopulation.taux_pauvrete, DataPopulation.accroissement);
+                    colorsPie.push("#023047", "#204ab3ff", "#8ecae6");
+                } else {
+                    labelsPie.push("Chômage (%)", "Pauvreté (%)");
+                    valuesPie.push(DataPopulation.taux_chomage, DataPopulation.taux_pauvrete);
+                    colorsPie.push("#023047", "#204ab3ff");
+                }
             }
 
             ChartInstancePie.current = new Chart(ctx, {
                 type: "pie",
                 data: {
                     labels: labelsPie,
-                    datasets : [{
+                    datasets: [{
                         data: valuesPie,
                         backgroundColor: colorsPie,
                         borderWidth: 2,
@@ -136,11 +142,11 @@ const GraphCarte = ({ dptId, activeYear }) => {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { 
-                            display: true, 
-                            position: 'bottom', 
-                            align: 'center', 
-                            labels: { 
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            align: 'center',
+                            labels: {
                                 color: 'white',
                                 font: { size: 11, weight: 'bold' },
                                 usePointStyle: true,
@@ -174,45 +180,47 @@ const GraphCarte = ({ dptId, activeYear }) => {
                 <div className="bg-[#2b3c54] p-5 rounded-xl border border-white/10 flex flex-col justify-center items-center relative w-full h-full min-h-[300px]">
                     <canvas ref={chartPie}></canvas>
                 </div>
-                <div className="bg-[#2b3c54] p-6 rounded-xl border border-white/10 h-full flex flex-col mr-4">
+                <div className="flex bg-[#2b3c54] flex-col justify-center mr-4 p-6 rounded-xl border border-white/10">
                     <h1 className="text-white font-bold flex-start mb-4 uppercase tracking-wider">Données textuelles</h1>
-                    <table className="w-full border border-white">
-                        <thead className="border border-white bg-[#219ebc]">
-                            <tr className="border border-white text-center">
-                                <th className="text-white border border-white">Nom</th>
-                                <th className="text-white border border-white">Valeur</th>
-                            </tr>
-                        </thead>
-                        <tbody className="text-center border border-white">
-                            <tr>
-                                <td className="text-white border border-white">Nombre d'habitants</td>
-                                <td className="text-white border border-white">{DataPopulation?.nb_habitants?.toLocaleString()}</td>
-                            </tr>
-                            <tr>
-                                <td className="text-white border border-white">Accroissement (%)</td>
-                                <td className="text-white border border-white">{DataPopulation?.accroissement} %</td>
-                            </tr>
-                            <tr>
-                                <td className="text-white border border-white">Population moins de 20 ans</td>
-                                <td className="text-white border border-white">{DataPopulation?.pop_moins_20ans} %</td>
-                            </tr>
-                            <tr>
-                                <td className="text-white border border-white">Population plus de 60 ans</td>
-                                <td className="text-white border border-white">{DataPopulation?.pop_plus_60ans} %</td>
-                            </tr>
-                            <tr>
-                                <td className="text-white border border-white">Taux de chômage (%)</td>
-                                <td className="text-white border border-white">{DataPopulation?.taux_chomage} %</td>
-                            </tr>
-                            <tr>
-                                <td className="text-white border border-white">Taux de pauvreté (%)</td>
-                                <td className="text-white border border-white">{DataPopulation?.taux_pauvrete} %</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div className=" h-full flex flex-col justify-center mr-4">
+                        <table className="w-full border border-white">
+                            <thead className="border border-white bg-[#219ebc]">
+                                <tr className="border border-white text-center">
+                                    <th className="text-white border border-white">Nom</th>
+                                    <th className="text-white border border-white">Valeur</th>
+                                </tr>
+                            </thead>
+                            <tbody className="text-center border border-white">
+                                <tr>
+                                    <td className="text-white border border-white">Nombre d'habitants</td>
+                                    <td className="text-white border border-white">{DataPopulation?.nb_habitants?.toLocaleString()}</td>
+                                </tr>
+                                <tr>
+                                    <td className="text-white border border-white">Accroissement (%)</td>
+                                    <td className="text-white border border-white">{DataPopulation?.accroissement} %</td>
+                                </tr>
+                                <tr>
+                                    <td className="text-white border border-white">Population moins de 20 ans</td>
+                                    <td className="text-white border border-white">{DataPopulation?.pop_moins_20ans} %</td>
+                                </tr>
+                                <tr>
+                                    <td className="text-white border border-white">Population plus de 60 ans</td>
+                                    <td className="text-white border border-white">{DataPopulation?.pop_plus_60ans} %</td>
+                                </tr>
+                                <tr>
+                                    <td className="text-white border border-white">Taux de chômage (%)</td>
+                                    <td className="text-white border border-white">{DataPopulation?.taux_chomage} %</td>
+                                </tr>
+                                <tr>
+                                    <td className="text-white border border-white">Taux de pauvreté (%)</td>
+                                    <td className="text-white border border-white">{DataPopulation?.taux_pauvrete} %</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            
+
             <div className="flex-1 min-h-0 bg-[#2b3c54] p-6 rounded-xl border border-white/5">
                 <canvas ref={chartRef}></canvas>
             </div>
